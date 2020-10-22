@@ -1,0 +1,1 @@
+subStringBydii(String str , int end) => str.length >= end ? str.substring(0,end)+'...' : str;

@@ -1,0 +1,540 @@
+child: TextField(
+                showCursor: false,
+                controller: _controller,
+                enabled: true,
+                onTap: () {
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState.startScan =
+                        !bienvenuePageState.startScan;
+                  });
+                },
+                // autofocus: true,
+                onSubmitted: (t) {
+                  print(t);
+                  _controller.text = '';
+                  if (bienvenuePageState.startScan) {
+                    FocusScope.of(context).previousFocus();
+                    for (var immo in bienvenuePageState.immos) {
+                      if (immo.code == t) {
+                        bienvenuePageState.setState(() {
+                          bienvenuePageState.isImmoHere = true;
+                          bienvenuePageState.immo = immo;
+                          bienvenuePageState.immo.emplacement_string = bienvenuePageState.lastLocalite.nom;
+                          bienvenuePageState.immo.dateTime = DateTime.now().toString();
+                        });
+                      }
+                    }
+
+                    if (bienvenuePageState.isImmoHere) {
+                      verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
+                          .then((verif) {
+                        if (verif) {
+                          showDialogError(
+                              context, "immobilisations déjà scannée");
+                        } else {
+                          showDialogEtatDuBien(context, 1);
+                        }
+                      });
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.isImmoHere = false;
+                      });
+                    } else {
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.immo = new Immobilisation(
+                            id: 0,
+                            libelle: '',
+                            commentaire: '',
+                            description: '',
+                            code: t,
+                            emplacement: '',
+                            etat: '');
+                        bienvenuePageState.isImmoHere = false;
+                      });
+                      verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
+                          .then((verif) {
+                        if (verif) {
+                          showDialogError(
+                              context, "immobilisations déjà scannée");
+                        } else {
+                          bienvenuePageState.setState(() {
+                            bienvenuePageState.screenWelcome = 5;
+                            bienvenuePageState.isImmoHere = false;
+                          });
+                        }
+                      });
+                    }
+                  } else {
+                    FocusScope.of(context).unfocus();
+                  }
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState.isImmoHere = false;
+                  });
+                },
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    hintText: ''),
+              ),
+
+
+
+
+
+  WEB CONNECT
+
+
+
+              print('in web');
+    if (bienvenuePageState.email == '' || bienvenuePageState.password == '') {
+      showDialogError(
+          context: context, msg: 'Veuillez Remplir tous les champs');
+    } else {
+      UtilsHttp.postByIssa('/login', {
+        "username": bienvenuePageState.email,
+        "password": bienvenuePageState.password
+      }).then((value) {
+        print(' value.statusCode => ${value.statusCode}');
+        if (value.statusCode == 200) {
+          setToken(value.data['token']).then((verif) {
+            bienvenuePageState.setState(() {
+              bienvenuePageState.screenWelcome = -1;
+            });
+            if (verif) {
+              print(verif);
+              UtilsHttp.getByIssa('/info').then((value) {
+                print(value.data.length);
+              });
+            }
+          });
+        } else {
+          showDialogError(
+              context: context, msg: 'Email ou Mot de Passe Incorect');
+        }
+      }).catchError((err) {
+        print(err.toString());
+        if (err.toString().split('[')[2].split(']')[0] == '403') {
+          showDialogError(
+              context: context, msg: 'Acces bloquée veullez Le superviseur');
+        } else if (err.toString().split('[')[2].split(']')[0] == '401') {
+          showDialogError(
+              context: context, msg: 'Email ou Mot de passe Incorect');
+        } else {
+          showDialogError(context: context, msg: 'unknow');
+        }
+      });
+    }
+
+
+
+    ADDLOCALITE
+
+    if (bienvenuePageState.niveauUnLocalite.subdivisions.length > 0)
+        SizedBox(
+          height: 16,
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauUnLocalite.subdivisions.length > 0)
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 16),
+          child: Container(
+            height: 50,
+            width: size.width * .6,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * .05,
+                ),
+                Container(
+                  width: size.width * .45,
+                  child: DropdownButton(
+                    icon: Container(),
+                    items: bienvenuePageState.niveauDeux,
+                    underline: Container(),
+                    dropdownColor: quatriemeColor,
+                    style: GoogleFonts.averiaSansLibre(
+                        fontSize: 14,
+                        color: troisiemeColor,
+                        fontWeight: FontWeight.w400),
+                    onChanged: (t) {
+                      print(bienvenuePageState.niveauDeuxLocalite.subdivisions.length);
+                      if (t.subdivisions.length > 0) {
+                        bienvenuePageState.setState(() {
+                          resetStateStep3();
+                          bienvenuePageState.niveauTrois = buildSousSection(
+                              bienvenuePageState.niveauDeuxLocalite);
+                          bienvenuePageState.niveauDeuxLocalite = t;
+                          bienvenuePageState.lastLocalite = t;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[3].libelle;
+                        });
+                      } else {
+                        bienvenuePageState.setState(() {
+                          resetStateStep3();
+                          bienvenuePageState.niveauTrois = buildSousSection(
+                              bienvenuePageState.niveauDeuxLocalite);
+                          bienvenuePageState.niveauDeuxLocalite = t;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[3].libelle;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      }
+                    },
+                    hint: bienvenuePageState.niveauDeuxLocalite.nom == ''
+                        ? Text(bienvenuePageState.libelle_localite[2].libelle)
+                        : Text(subStringBydii(
+                            bienvenuePageState.niveauDeuxLocalite.nom, 20)),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * .08,
+                ),
+                Icon(
+                  Icons.arrow_drop_down_outlined,
+                  size: 28,
+                )
+              ],
+            ),
+          ),
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauDeuxLocalite.subdivisions.length > 0)
+        SizedBox(
+          height: 16,
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauDeuxLocalite.subdivisions.length > 0)
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 16),
+          child: Container(
+            height: 50,
+            width: size.width * .6,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * .05,
+                ),
+                Container(
+                  width: size.width * .45,
+                  child: DropdownButton(
+                    icon: Container(),
+                    items: bienvenuePageState.niveauTrois,
+                    underline: Container(),
+                    dropdownColor: quatriemeColor,
+                    style: GoogleFonts.averiaSansLibre(
+                        fontSize: 14,
+                        color: troisiemeColor,
+                        fontWeight: FontWeight.w400),
+                    onChanged: (t) {
+                      if (t.subdivisions.length > 0) {
+                        bienvenuePageState.setState(() {
+                          resetStateStep4();
+                          bienvenuePageState.niveauQuatre = buildSousSection(
+                              bienvenuePageState.niveauTroisLocalite);
+                          bienvenuePageState.niveauTroisLocalite = t;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[4].libelle;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      } else {
+                        bienvenuePageState.setState(() {
+                          resetStateStep4();
+                          bienvenuePageState.niveauQuatre = buildSousSection( bienvenuePageState.niveauTroisLocalite);
+                          bienvenuePageState.niveauTroisLocalite = t;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[4].libelle;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      }
+                    },
+                    hint: bienvenuePageState.niveauTroisLocalite.nom == ''
+                        ? Text(bienvenuePageState.libelle_localite[3].libelle)
+                        : Text(subStringBydii(
+                            bienvenuePageState.niveauTroisLocalite.nom, 20)),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * .08,
+                ),
+                Icon(
+                  Icons.arrow_drop_down_outlined,
+                  size: 28,
+                )
+              ],
+            ),
+          ),
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauTroisLocalite.subdivisions.length > 0)
+        SizedBox(
+          height: 16,
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauTroisLocalite.subdivisions.length > 0)
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 16),
+          child: Container(
+            height: 50,
+            width: size.width * .6,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * 0.05,
+                ),
+                Container(
+                  width: size.width * 0.45,
+                  child: DropdownButton(
+                    icon: Container(),
+                    items: bienvenuePageState.niveauQuatre,
+                    underline: Container(),
+                    dropdownColor: quatriemeColor,
+                    style: GoogleFonts.averiaSansLibre(
+                        fontSize: 14,
+                        color: troisiemeColor,
+                        fontWeight: FontWeight.w400),
+                    onChanged: (t) {
+                      if (t.subdivisions.length > 0) {
+                        bienvenuePageState.setState(() {
+                          resetStateStep5();
+                          bienvenuePageState.niveauCinq = buildSousSection( bienvenuePageState.niveauQuatreLocalite);
+                          bienvenuePageState.niveauQuatreLocalite = t;
+                          bienvenuePageState.lastLocalite = t;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                        });
+                      } else {
+                        bienvenuePageState.setState(() {
+                          resetStateStep5();
+                          bienvenuePageState.niveauCinq = buildSousSection( bienvenuePageState.niveauQuatreLocalite);
+                          bienvenuePageState.niveauQuatreLocalite = t;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                          bienvenuePageState.isLastLibelle = false;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      }
+                    },
+                    hint: bienvenuePageState.niveauQuatreLocalite.nom == ''
+                        ? Text(bienvenuePageState.libelle_localite[4].libelle)
+                        : Text(subStringBydii(
+                            bienvenuePageState.niveauQuatreLocalite.nom, 20)),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * .08,
+                ),
+                Icon(
+                  Icons.arrow_drop_down_outlined,
+                  size: 28,
+                )
+              ],
+            ),
+          ),
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauQuatreLocalite.subdivisions.length > 0)
+        SizedBox(
+          height: 16,
+        )
+      else
+        Container(),
+      if (bienvenuePageState.niveauQuatreLocalite.subdivisions.length > 0)
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 16),
+          child: Container(
+            height: 50,
+            width: size.width * .6,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * .05,
+                ),
+                Container(
+                  width: size.width * .46,
+                  child: DropdownButton(
+                    icon: Container(),
+                    items: bienvenuePageState.niveauCinq,
+                    underline: Container(),
+                    dropdownColor: quatriemeColor,
+                    iconSize: 32,
+                    style: GoogleFonts.averiaSansLibre(
+                        fontSize: 14,
+                        color: troisiemeColor,
+                        fontWeight: FontWeight.w400),
+                    onChanged: (t) {
+                      if (t.subdivisions.length > 0) {
+                        bienvenuePageState.setState(() {
+                          resetStateStep6();
+                          bienvenuePageState.niveauSix = buildSousSection( bienvenuePageState.niveauCinqLocalite);
+                          bienvenuePageState.niveauCinqLocalite = t;
+                          print(bienvenuePageState.niveauCinqLocalite.nom);
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                          bienvenuePageState.isLastLibelle = true;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      } else {
+                        bienvenuePageState.setState(() {
+                          resetStateStep6();
+                          bienvenuePageState.niveauSix = buildSousSection( bienvenuePageState.niveauCinqLocalite);
+                          bienvenuePageState.niveauCinqLocalite = t;
+                          print(bienvenuePageState.niveauCinqLocalite.nom);
+                          bienvenuePageState.lastLocalite = t;
+                          bienvenuePageState.isLastLibelle = true;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                        });
+                      }
+                    },
+                    hint: bienvenuePageState.niveauCinqLocalite.nom == ''
+                        ? Text(bienvenuePageState.libelle_localite[5].libelle)
+                        : Text(subStringBydii(
+                            bienvenuePageState.niveauCinqLocalite.nom, 20)),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * .08,
+                ),
+                Icon(
+                  Icons.arrow_drop_down_outlined,
+                  size: 28,
+                )
+              ],
+            ),
+          ),
+        )
+      else
+        Container(),
+         if (bienvenuePageState.niveauCinqLocalite.subdivisions.length > 0)
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 16),
+          child: Container(
+            height: 50,
+            width: size.width * .6,
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: size.width * .05,
+                ),
+                Container(
+                  width: size.width * .46,
+                  child: DropdownButton(
+                    icon: Container(),
+                    items: bienvenuePageState.niveauSix,
+                    underline: Container(),
+                    dropdownColor: quatriemeColor,
+                    iconSize: 32,
+                    style: GoogleFonts.averiaSansLibre(
+                        fontSize: 14,
+                        color: troisiemeColor,
+                        fontWeight: FontWeight.w400),
+                    onChanged: (t) {
+                      if (t.subdivisions.length > 0) {
+                        bienvenuePageState.setState(() {
+                          resetStateStep6();
+                          bienvenuePageState.niveauSept = buildSousSection( bienvenuePageState.niveauSixLocalite);
+                          bienvenuePageState.niveauSixLocalite = t;
+                          print(bienvenuePageState.niveauCinqLocalite.nom);
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                          bienvenuePageState.isLastLibelle = true;
+                          bienvenuePageState.lastLocalite = t;
+                        });
+                      } else {
+                        bienvenuePageState.setState(() {
+                          resetStateStep6();
+                          bienvenuePageState.niveauSix = buildSousSection( bienvenuePageState.niveauCinqLocalite);
+                          bienvenuePageState.niveauCinqLocalite = t;
+                          print(bienvenuePageState.niveauCinqLocalite.nom);
+                          bienvenuePageState.lastLocalite = t;
+                          bienvenuePageState.isLastLibelle = true;
+                          bienvenuePageState.lastLibelle =
+                              bienvenuePageState.libelle_localite[5].libelle;
+                        });
+                      }
+                    },
+                    hint: bienvenuePageState.niveauSixLocalite.nom == ''
+                        ? Text('Sous ${bienvenuePageState.libelle_localite[5].libelle}')
+                        : Text(subStringBydii(
+                            bienvenuePageState.niveauSixLocalite.nom, 20)),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * .08,
+                ),
+                Icon(
+                  Icons.arrow_drop_down_outlined,
+                  size: 28,
+                )
+              ],
+            ),
+          ),
+        )
+      else
+        Container(),
+
+
+
+
+
+
+
+
+
+
+
+
+        if (ln.subdivisions.length > 0) {
+        for (var i in ln.subdivisions) {
+          for (var j in liste) {
+            print(
+                'getIntNiveau getSubdivisionLocalite ${j.nom} (j.niveau) ${getIntNiveau(j.niveau)}');
+            if (getIntNiveau(i.niveau) - 1 == getIntNiveau(j.niveau)) {
+              ln.subdivisions.add(Localites(
+                  subdivisions: j.subdivisions,
+                  niveau: j.niveau,
+                  idParent: j.idParent,
+                  id: j.id,
+                  nom: j.nom));
+            }
+          }
+        }
+      } else {
+        for (var j in liste) {
+          if (getIntNiveau(j.niveau) - 1 == getIntNiveau(ln.niveau)) {
+            ln.subdivisions.add(Localites(
+                subdivisions: j.subdivisions,
+                niveau: j.niveau,
+                idParent: j.idParent,
+                id: j.id,
+                nom: j.nom));
+          }
+        }
+      }
