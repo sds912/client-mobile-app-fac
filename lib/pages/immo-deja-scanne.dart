@@ -86,7 +86,7 @@ immoDejaImmobilisation(BuildContext context, Immobilisation immo) {
                       // color: Colors.green,
                       child: Center(
                         child: Text(
-                          'immobilisation déjas scannée ',
+                          'immobilisation déja scannée ',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.averiaSansLibre(
                               color: Colors.black,

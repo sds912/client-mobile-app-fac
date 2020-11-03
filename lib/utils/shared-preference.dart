@@ -174,7 +174,7 @@ Future<bool> setCloseComptageZone(Localites ln) =>
         return prefs.setString('closeZone', new_string);
       }
     });
-Future<bool>rebuildSetCloseComptageZone(Localites ln) =>
+Future<bool> rebuildSetCloseComptageZone(Localites ln) =>
     SharedPreferences.getInstance().then((prefs) {
       String new_string = '';
       if (prefs.getString('closeZone') == null) {
@@ -185,40 +185,46 @@ Future<bool>rebuildSetCloseComptageZone(Localites ln) =>
           var cls = item.split('|');
           Localites l = Localites(id: cls[1], nom: '', subdivisions: []);
           if (cls[0] == '1' && cls[1] == ln.id.toString()) {
-            new_string = prefs.getString('closeZone') + '#' + '0|${l.id}';
+            new_string += prefs.getString('closeZone') + '#' + '0|${l.id}';
           } else {
-            new_string = prefs.getString('closeZone') + '#' + '1|${l.id}';
+            new_string += prefs.getString('closeZone') + '#' + '1|${l.id}';
           }
+          print(new_string);
         }
+        // print('new_string => $new_string');
         return prefs.setString('closeZone', new_string);
       }
     });
 
-Future<bool>setCodeOpenLocalite(String str) => SharedPreferences.getInstance().then((prefs){
-  if (prefs.getString('setCodeOpenLocalite') == null) {
-    return prefs.setString('setCodeOpenLocalite', str);
-  } else {
-    return prefs.setString('setCodeOpenLocalite', prefs.getString('setCodeOpenLocalite') + "#wicf_lilz_Ike"+ str);
-  }
-});
-
-Future<bool> checkIfCodeExist(String str) => SharedPreferences.getInstance().then((prefs) {
-  if (prefs.getString('setCodeOpenLocalite')==null) {
-    return false ;
-  } else {
-    var JD = prefs.getString('setCodeOpenLocalite').split('#wicf_lilz_Ike');
-
-    for (var item in JD) {
-      if (item==str) {
-        return true;
+Future<bool> setCodeOpenLocalite(String str) =>
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.getString('setCodeOpenLocalite') == null) {
+        return prefs.setString('setCodeOpenLocalite', str);
+      } else {
+        return prefs.setString('setCodeOpenLocalite',
+            prefs.getString('setCodeOpenLocalite') + "#wicf_lilz_Ike" + str);
       }
-    }
-    return false;
-  }
-});
+    });
+
+Future<bool> checkIfCodeExist(String str) =>
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.getString('setCodeOpenLocalite') == null) {
+        return false;
+      } else {
+        var JD = prefs.getString('setCodeOpenLocalite').split('#wicf_lilz_Ike');
+
+        for (var item in JD) {
+          if (item == str) {
+            return true;
+          }
+        }
+        return false;
+      }
+    });
 
 Future<bool> getCloseComptageZone(Localites ln) =>
     SharedPreferences.getInstance().then((prefs) {
+      bool verif = false;
       if (prefs.getString('closeZone') == null) {
         return false;
       } else {
@@ -226,10 +232,18 @@ Future<bool> getCloseComptageZone(Localites ln) =>
         for (var item in Jd) {
           var cls = item.split('|');
           if (cls[0] == '1' && cls[1] == ln.id.toString()) {
-            return true;
+            verif = true;
           }
         }
-        return false;
+        if (verif) {
+          for (var item in Jd) {
+            var cls = item.split('|');
+            if (cls[0] == '0' && cls[1] == ln.id.toString()) {
+              verif = false;
+            }
+          }
+        }
+        return verif;
       }
     });
 

@@ -14,7 +14,7 @@ import 'package:v1/widget/top-navBar.dart';
 
 menuPage(BuildContext context) {
   Size size = MediaQuery.of(context).size;
-  
+
   return Stack(
     children: [
       Container(
@@ -242,11 +242,15 @@ menuPage(BuildContext context) {
                   // bienvenuePageState.setState(() {
                   //   bienvenuePageState.screenWelcome = 4;
                   // });
-                  UtilsHttp.postByIssa('/mobile/data', str).then((data) {
-                    print(data);
-                    bienvenuePageState.setState(() {
-                      bienvenuePageState.screenWelcome = 4;
-                    });
+                  UtilsHttp.postByIssa('/mobile/data', str).then((value) {
+                    if (value.data['code'] == 200) {
+                      showDialogErrorSuccess(context: context , msg: "Envoie des données validé");
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.screenWelcome = 4;
+                      });
+                    }else {
+                      showDialogError(context: context , msg: "L'envoie des données a échoué");
+                    }
                   });
                 });
               } else {

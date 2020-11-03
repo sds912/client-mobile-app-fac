@@ -91,19 +91,19 @@ firstPage(BuildContext context) {
                       image: AssetImage('assets/images/suivant_icon.png'))),
             ),
           )),
-          Positioned(
-            top: size.height * .82,
-            left: size.width * .1,
-            child: Container(
-            height: 56.0,
-            width: size.width * .8,
-            decoration: BoxDecoration(
-              // color: Colors.red,
-              image: DecorationImage(
-                image: AssetImage('assets/images/info_text_buttom_home.png')
-              )
-            ),
-          )),
+          // Positioned(
+          //   top: size.height * .82,
+          //   left: size.width * .1,
+          //   child: Container(
+          //   height: 56.0,
+          //   width: size.width * .8,
+          //   decoration: BoxDecoration(
+          //     // color: Colors.red,
+          //     image: DecorationImage(
+          //       image: AssetImage('assets/images/info_text_buttom_home.png')
+          //     )
+          //   ),
+          // )),
           Positioned(
             bottom: -10,
             child: Container(
