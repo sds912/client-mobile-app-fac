@@ -60,52 +60,52 @@ stepPage(BuildContext context) {
         left: size.width * .075,
         child: buildStepLocalite(context),
       ),
-      !bienvenuePageState.isNewImmo
-          ? Positioned(
-              top: size.height * .74,
-              left: size.width * .5 - 24.0,
-              child: GestureDetector(
-                onTap: () {
-                  print(bienvenuePageState.libelle_localite.length);
-                  if (bienvenuePageState.libelle_localite.length ==
-                      bienvenuePageState.taille_libelle) {
-                    print(getIntNiveau(bienvenuePageState.lastLocalite.niveau));
-                    if (bienvenuePageState.lastLocalite.id == '0') {
-                      showDialogError(
-                          context: context,
-                          msg: "Veuiller choisir une Localité pour ajouter");
-                    } else {
-                      getCloseComptageZone(bienvenuePageState.lastLocalite)
-                          .then((verif) {
-                        if (verif) {
-                          showDialogErrorComptageDeblocage(
-                              context: context,
-                              msg:
-                                  "Cette localité a éte clôtureé . \n Voullez-vous le réouvrir ?");
-                        } else {
-                          bienvenuePageState.setState(() {
-                            bienvenuePageState.screenWelcome = 12;
-                          });
-                        }
-                      });
-                    }
-                  } else {
-                    showDialogError(
-                        context: context,
-                        msg:
-                            "Vous n’êtes pas autorisé à ajouter une localité. \nContacter votre superviseur.",
-                        fontSize: 18);
-                  }
-                },
-                child: Container(
-                  height: 48.0,
-                  width: 48.0,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/btn_plus.png'))),
-                ),
-              ))
-          : Container(),
+      // !bienvenuePageState.isNewImmo
+      //     ? Positioned(
+      //         top: size.height * .74,
+      //         left: size.width * .5 - 24.0,
+      //         child: GestureDetector(
+      //           onTap: () {
+      //             print(bienvenuePageState.libelle_localite.length);
+      //             if (bienvenuePageState.libelle_localite.length ==
+      //                 bienvenuePageState.taille_libelle) {
+      //               print(getIntNiveau(bienvenuePageState.lastLocalite.niveau));
+      //               if (bienvenuePageState.lastLocalite.id == '0') {
+      //                 showDialogError(
+      //                     context: context,
+      //                     msg: "Veuiller choisir une Localité pour ajouter");
+      //               } else {
+      //                 getCloseComptageZone(bienvenuePageState.lastLocalite)
+      //                     .then((verif) {
+      //                   if (verif) {
+      //                     showDialogErrorComptageDeblocage(
+      //                         context: context,
+      //                         msg:
+      //                             "Cette localité a éte clôtureé . \n Voullez-vous le réouvrir ?");
+      //                   } else {
+      //                     bienvenuePageState.setState(() {
+      //                       bienvenuePageState.screenWelcome = 12;
+      //                     });
+      //                   }
+      //                 });
+      //               }
+      //             } else {
+      //               showDialogError(
+      //                   context: context,
+      //                   msg:
+      //                       "Vous n’êtes pas autorisé à ajouter une localité. \nContacter votre superviseur.",
+      //                   fontSize: 18);
+      //             }
+      //           },
+      //           child: Container(
+      //             height: 48.0,
+      //             width: 48.0,
+      //             decoration: BoxDecoration(
+      //                 image: DecorationImage(
+      //                     image: AssetImage('assets/images/btn_plus.png'))),
+      //           ),
+      //         ))
+      //     : Container(),
       !bienvenuePageState.isNewImmo
           ? Positioned(
               top: size.height * .81,

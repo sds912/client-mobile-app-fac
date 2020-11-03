@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const base_url = 'https://35b8a7d71086.ngrok.io/api'; //ENLEVER LES SS
+const base_url = 'https://62175d8cd66c.ngrok.io/api'; //ENLEVER LES SS
 
 verifIfApiIsAvailable() async{
   return http.get(base_url).then(((req) async {
