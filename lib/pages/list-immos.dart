@@ -6,6 +6,7 @@ import 'package:v1/models/immobilisation.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/getUserRole.dart';
 import 'package:v1/utils/shared-preference.dart';
+import 'package:v1/utils/web.dart';
 import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/showDialogError.dart';
 import 'package:v1/widget/top-navBar.dart';
@@ -42,7 +43,8 @@ listImmo(context) {
                     bienvenuePageState.immo = immo;
                     bienvenuePageState.immo.emplacement_string =
                         bienvenuePageState.lastLocalite.nom;
-                        bienvenuePageState.immo.search_list = bienvenuePageState.search_immo;
+                    bienvenuePageState.immo.search_list =
+                        bienvenuePageState.search_immo;
                     bienvenuePageState.immo.lecteur =
                         bienvenuePageState.user.nom;
                     bienvenuePageState.immo.dateTime =
@@ -50,7 +52,6 @@ listImmo(context) {
                   });
                 }
               }
-
               if (bienvenuePageState.isImmoHere) {
                 verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
                     .then((verif) {
@@ -58,16 +59,29 @@ listImmo(context) {
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 14;
                     });
-                    // showDialogError(
-                    //     context: context, msg: "immobilisations déjà scannée");
-
-                    // page Immo déjas Scanne
                   } else {
-                    // showDialogEtatDuBien(context, 1);
-                    // go aother Page
-                    bienvenuePageState.setState(() {
-                      bienvenuePageState.screenWelcome = 13;
-                    });
+                    if (bienvenuePageState.etat_du_bien) {
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.screenWelcome = 13;
+                      });
+                    } else {
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.immo.etat = '1';
+                        bienvenuePageState.immo.status = '1';
+                        bienvenuePageState.immo.emplacement =
+                            bienvenuePageState.lastLocalite.id.toString();
+                        bienvenuePageState.immo.search_list =
+                            bienvenuePageState.search_immo;
+                        bienvenuePageState.immo.emplacement_string =
+                            bienvenuePageState.lastLocalite.nom;
+                        bienvenuePageState.immos_scanne
+                            .add(bienvenuePageState.immo);
+                        setImmobilisationListFile(bienvenuePageState.immo);
+                        setImmobilisationListFileJson(bienvenuePageState.immo);
+                      });
+                      sendDataRealTime();
+                      FocusScope.of(context).nextFocus();
+                    }
                   }
                 });
                 bienvenuePageState.setState(() {
@@ -92,10 +106,107 @@ listImmo(context) {
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 14;
                     });
-                    // showDialogError(
-                    //     context: context, msg: "immobilisations déjà scannée");
                   } else {
                     bienvenuePageState.setState(() {
+                      bienvenuePageState.screenWelcome = 5;
+                      bienvenuePageState.shwoCardRechercheCatalogue = true;
+                      bienvenuePageState.isImmoHere = false;
+                    });
+                  }
+                });
+              }
+            }
+          },
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              hintText: ''),
+        ),
+      ),
+      Positioned(
+        child: TextField(
+          showCursor: false,
+          controller: _controller,
+          enabled: true,
+          autofocus: true,
+          onSubmitted: (t) {
+            _controller.text = '';
+            if (bienvenuePageState.lastLocalite.id != 0) {
+              for (var immo in bienvenuePageState.immos) {
+                if (immo.code == t) {
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState.isImmoHere = true;
+                    bienvenuePageState.immo = immo;
+                    bienvenuePageState.immo.emplacement_string =
+                        bienvenuePageState.lastLocalite.nom;
+                    bienvenuePageState.immo.search_list =
+                        bienvenuePageState.search_immo;
+                    bienvenuePageState.immo.lecteur =
+                        bienvenuePageState.user.nom;
+                    bienvenuePageState.immo.dateTime =
+                        DateTime.now().toString();
+                  });
+                }
+              }
+              if (bienvenuePageState.isImmoHere) {
+                verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
+                    .then((verif) {
+                  if (verif) {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState.screenWelcome = 14;
+                    });
+                  } else {
+                    // immo etat du bien et algo
+                    if (bienvenuePageState.etat_du_bien) {
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.screenWelcome = 13;
+                      });
+                    } else {
+                      bienvenuePageState.setState(() {
+                        bienvenuePageState.immo.etat = '1';
+                        bienvenuePageState.immo.status = '1';
+                        bienvenuePageState.immo.emplacement =
+                            bienvenuePageState.lastLocalite.id.toString();
+                        bienvenuePageState.immo.search_list =
+                            bienvenuePageState.search_immo;
+                        bienvenuePageState.immo.emplacement_string =
+                            bienvenuePageState.lastLocalite.nom;
+                        bienvenuePageState.immos_scanne
+                            .add(bienvenuePageState.immo);
+                        setImmobilisationListFile(bienvenuePageState.immo);
+                        setImmobilisationListFileJson(bienvenuePageState.immo);
+                      });
+                      sendDataRealTime();
+                      FocusScope.of(context).previousFocus();
+                    }
+                  }
+                });
+                bienvenuePageState.setState(() {
+                  bienvenuePageState.isImmoHere = false;
+                });
+              } else {
+                bienvenuePageState.setState(() {
+                  bienvenuePageState.immo = new Immobilisation(
+                      id: 0,
+                      libelle: '',
+                      commentaire: '',
+                      description: '',
+                      code: t,
+                      lecteur: bienvenuePageState.user.nom,
+                      emplacement: '',
+                      etat: '');
+                  bienvenuePageState.isImmoHere = false;
+                });
+                verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
+                    .then((verif) {
+                  if (verif) {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState.screenWelcome = 14;
+                    });
+                  } else {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState.shwoCardRechercheCatalogue = true;
                       bienvenuePageState.screenWelcome = 5;
                       bienvenuePageState.isImmoHere = false;
                     });
@@ -104,10 +215,6 @@ listImmo(context) {
               }
             }
           },
-          // bienvenuePageState.setState(() {
-          //   bienvenuePageState.isImmoHere = false;
-          // });
-          // FocusScope.of(context).previousFocus();
           decoration: InputDecoration(
               border: InputBorder.none,
               disabledBorder: InputBorder.none,
@@ -120,7 +227,7 @@ listImmo(context) {
         child: Container(
           height: size.height * .7,
           width: size.width,
-          color: Colors.grey[50],
+          color: Colors.white38,
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: [
@@ -141,17 +248,15 @@ listImmo(context) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: size.width * .45,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'Code',
-                        style: GoogleFonts.averiaSansLibre(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 14,
-                            color: Colors.white),
-                      ),
+                  width: size.width * .3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 45.0, top: 8.0),
+                    child: Text(
+                      'Code',
+                      style: GoogleFonts.averiaSansLibre(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          color: Colors.white),
                     ),
                   ),
                 ),
@@ -160,17 +265,32 @@ listImmo(context) {
                   color: Colors.white,
                 ),
                 Container(
-                  width: size.width * .45,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 32.0),
-                      child: Text(
-                        'Description',
-                        style: GoogleFonts.averiaSansLibre(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 14,
-                            color: Colors.white),
-                      ),
+                  width: size.width * .4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 38.0),
+                    child: Text(
+                      'Description',
+                      style: GoogleFonts.averiaSansLibre(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 2,
+                  color: Colors.white,
+                ),
+                Container(
+                  width: size.width * .27,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 15.0),
+                    child: Text(
+                      'Etat du bien',
+                      style: GoogleFonts.averiaSansLibre(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          color: Colors.white),
                     ),
                   ),
                 ),
@@ -200,9 +320,7 @@ listImmo(context) {
               left: size.width * .2,
               child: GestureDetector(
                 onTap: () async => showDialogErrorComptage(
-                    context: context,
-                    msg:
-                        'Voulez vous clotûrer le comptage?'),
+                    context: context, msg: 'Voulez vous clotûrer le comptage?'),
                 child: Container(
                   height: size.height * .07,
                   width: size.width * .6,
@@ -253,11 +371,15 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
             cells: [
               DataCell(
                   Container(
-                    width: size.width * .4,
-                    child: Text(
-                      item.code,
-                      style: GoogleFonts.averiaSerifLibre(
-                          fontSize: 12, fontWeight: FontWeight.w300),
+                    width: size.width * .2,
+                    child: Center(
+                      child: Text(
+                        item.code.length > 12
+                            ? item.code.substring(0, 12)
+                            : item.code,
+                        style: GoogleFonts.averiaSerifLibre(
+                            fontSize: 10, fontWeight: FontWeight.w300),
+                      ),
                     ),
                   ), onTap: () {
                 bienvenuePageState.setState(() {
@@ -267,19 +389,27 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
               }),
               DataCell(
                 Container(
-                    width: size.width * .4,
+                    width: size.width * .3,
                     // color: Colors.blue,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           item.libelle.length > 12
-                              ? item.libelle.substring(0, 12) 
+                              ? item.libelle.substring(0, 12)
                               : item.libelle,
                           style: GoogleFonts.averiaSerifLibre(
-                              fontSize: 12, fontWeight: FontWeight.w300),
+                              fontSize: 10, fontWeight: FontWeight.w300),
                         ),
-                        SizedBox(width: 10,),
-                        item.image =='' ? Container() : Icon(Icons.photo , color: Colors.orange[700],)
+                        SizedBox(
+                          width: 5,
+                        ),
+                        item.image == ''
+                            ? Container()
+                            : Icon(
+                                Icons.photo,
+                                color: Colors.orange[700],
+                              )
                       ],
                     )),
                 onTap: () {
@@ -287,6 +417,34 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                     bienvenuePageState.immobilisation_detail = item;
                     bienvenuePageState.screenWelcome = 9;
                   });
+                },
+              ),
+              DataCell(
+                Container(
+                    width: size.width * .1,
+                    // color: Colors.blue,
+                    child: item.etat == '1'
+                        ? Icon(
+                            Icons.check_box_sharp,
+                            color: Colors.green,
+                          )
+                        : Icon(
+                            Icons.check_box_outline_blank_sharp,
+                            color: Colors.red,
+                          )),
+                onTap: () {
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState
+                        .immos_scanne[bienvenuePageState.immos_scanne
+                            .lastIndexWhere((element) =>
+                                element.id == item.id &&
+                                element.dateTime == item.dateTime)]
+                        .etat = item.etat == '1' ? '0' : '1';
+                  });
+                  setListImmobilisationFileJson(
+                      bienvenuePageState.immos_scanne);
+
+                  sendDataRealTime();
                 },
               ),
             ]));
@@ -299,11 +457,14 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
             cells: [
               DataCell(
                   Container(
-                    width: size.width * .4,
+                    width: size.width * .2,
+                    // color: Colors.red,
                     child: Text(
-                      item.code,
+                      item.code.length > 12
+                          ? item.code.substring(0, 12)
+                          : item.code,
                       style: GoogleFonts.averiaSerifLibre(
-                          fontSize: 12, fontWeight: FontWeight.w300),
+                          fontSize: 10, fontWeight: FontWeight.w300),
                     ),
                   ), onTap: () {
                 bienvenuePageState.setState(() {
@@ -313,19 +474,60 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
               }),
               DataCell(
                 Container(
-                    width: size.width * .4,
-                    child: Text(
-                      item.libelle.length > 12
-                          ? item.libelle.substring(0, 12)
-                          : item.libelle,
-                      style: GoogleFonts.averiaSerifLibre(
-                          fontSize: 12, fontWeight: FontWeight.w300),
+                    width: size.width * .3,
+                    // color: Colors.blue,
+                    child: Row(
+                      children: [
+                        Text(
+                          item.libelle.length > 12
+                              ? item.libelle.substring(0, 12)
+                              : item.libelle,
+                          style: GoogleFonts.averiaSerifLibre(
+                              fontSize: 10, fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        item.image == ''
+                            ? Container()
+                            : Icon(
+                                Icons.photo,
+                                color: Colors.orange[700],
+                              )
+                      ],
                     )),
                 onTap: () {
                   bienvenuePageState.setState(() {
                     bienvenuePageState.immobilisation_detail = item;
                     bienvenuePageState.screenWelcome = 9;
                   });
+                },
+              ),
+              DataCell(
+                Container(
+                    width: size.width * .1,
+                    // color: Colors.blue,
+                    child: item.etat == '1'
+                        ? Icon(
+                            Icons.check_box_sharp,
+                            color: Colors.green,
+                          )
+                        : Icon(
+                            Icons.check_box_outline_blank_sharp,
+                            color: Colors.red,
+                          )),
+                onTap: () {
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState
+                        .immos_scanne[bienvenuePageState.immos_scanne
+                            .lastIndexWhere((element) =>
+                                element.id == item.id &&
+                                element.dateTime == item.dateTime)]
+                        .etat = item.etat == '1' ? '0' : '1';
+                  });
+                  setListImmobilisationFileJson(
+                      bienvenuePageState.immos_scanne);
+                  sendDataRealTime();
                 },
               ),
             ]));
@@ -341,24 +543,6 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
       cells: [
         DataCell(Container()),
         DataCell(Container()),
-      ]));
-
-  l.add(DataRow(
-      color:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        return Colors.grey[200];
-      }),
-      cells: [
-        DataCell(Container()),
-        DataCell(Container()),
-      ]));
-  l.add(DataRow(
-      color:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        return Colors.grey[50];
-      }),
-      cells: [
-        DataCell(Container()),
         DataCell(Container()),
       ]));
 
@@ -367,10 +551,11 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
 
 Widget getTable(List<Immobilisation> p, BuildContext context) {
   return DataTable(
-      columnSpacing: 56.0,
+      columnSpacing: 16.0,
       horizontalMargin: 24.0,
       sortAscending: true,
       columns: [
+        DataColumn(label: Text('')),
         DataColumn(label: Text('')),
         DataColumn(label: Text('')),
       ],

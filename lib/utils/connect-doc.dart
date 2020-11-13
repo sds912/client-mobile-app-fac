@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:v1/models/catalogue.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/models/inventaire.dart';
 import 'package:v1/models/libelle_localite.dart';
@@ -51,6 +52,10 @@ connectDoc(BuildContext context) async {
                             Immobilisation.fromJson(data);
                         bienvenuePageState.inventaire =
                             Inventaire.fromJson(data);
+                        bienvenuePageState.catalogues = Catalogue.fromJson(data);
+                        for (var item in bienvenuePageState.catalogues) {
+                          bienvenuePageState.catalogue_recherche.add(item.libelle);
+                        }
                       });
                     });
                     UtilsHttp.getByIssa(

@@ -7,6 +7,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/pages/bienvenue.dart';
+import 'package:v1/utils/web.dart';
 import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/showDialogError.dart';
 import 'package:v1/widget/top-navBar.dart';
@@ -109,32 +110,57 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                             showDialogErrorSuccess(
                                 context: context,
                                 msg: "Immobilisation ajoutée avec succes.");
+                            sendDataRealTime();
                           });
                         } else {
-                          ImagePicker.pickImage(
-                                  source: ImageSource.camera,
-                                  maxHeight: 800,
-                                  maxWidth: 1200)
-                              .then((file) async {
-                            Io.File compressedFile =
-                                await FlutterNativeImage.compressImage(
-                               file.path,
-                              quality: 80,
-                              percentage: 80,
-                              targetHeight: 800,
-                              targetWidth: 1200
-                            );
+                          if (bienvenuePageState.take_picture) {
+                            ImagePicker.pickImage(
+                                    source: ImageSource.camera,
+                                    maxHeight: 800,
+                                    maxWidth: 1200)
+                                .then((file) async {
+                              Io.File compressedFile =
+                                  await FlutterNativeImage.compressImage(
+                                      file.path,
+                                      quality: 80,
+                                      percentage: 80,
+                                      targetHeight: 800,
+                                      targetWidth: 1200);
 
-                            var bytes = new Io.File(compressedFile.path);
-                            var image = bytes.readAsBytesSync();
-                            String base64Encode(List<int> image) =>
-                                base64.encode(image);
+                              var bytes = new Io.File(compressedFile.path);
+                              var image = bytes.readAsBytesSync();
+                              String base64Encode(List<int> image) =>
+                                  base64.encode(image);
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+
+                                bienvenuePageState.immo.image =
+                                    base64Encode(image);
+                                bienvenuePageState.immo.status =
+                                    bienvenuePageState.immo.code == ''
+                                        ? '2'
+                                        : '0';
+                                bienvenuePageState.immos_scanne
+                                    .add(bienvenuePageState.immo);
+                                setImmobilisationListFile(
+                                    bienvenuePageState.immo);
+                                setImmobilisationListFileJson(
+                                    bienvenuePageState.immo);
+
+                                bienvenuePageState.screenWelcome = 4;
+                                showDialogErrorSuccess(
+                                    context: context,
+                                    msg: "Immobilisation ajoutée avec succes.");
+                              });
+                              sendDataRealTime();
+                            });
+                          } else {
                             bienvenuePageState.setState(() {
                               bienvenuePageState.immo.dateTime =
                                   DateTime.now().toString();
 
-                              bienvenuePageState.immo.image =
-                                  base64Encode(image);
+                              bienvenuePageState.immo.image = '';
                               bienvenuePageState.immo.status =
                                   bienvenuePageState.immo.code == ''
                                       ? '2'
@@ -151,7 +177,8 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                                   context: context,
                                   msg: "Immobilisation ajoutée avec succes.");
                             });
-                          });
+                            sendDataRealTime();
+                          }
                         }
                       },
                       child: Container(
@@ -184,32 +211,56 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                             showDialogErrorSuccess(
                                 context: context,
                                 msg: "Immobilisation ajoutée avec succes.");
+                            sendDataRealTime();
                           });
                         } else {
-                          ImagePicker.pickImage(
-                                  source: ImageSource.camera,
-                                  maxHeight: 800,
-                                  maxWidth: 1200)
-                              .then((file) async {
-                            Io.File compressedFile =
-                                await FlutterNativeImage.compressImage(
-                                file.path,
-                              quality: 80,
-                              percentage: 80,
-                              targetHeight: 800,
-                              targetWidth: 1200
-                            );
+                          if (bienvenuePageState.take_picture) {
+                            ImagePicker.pickImage(
+                                    source: ImageSource.camera,
+                                    maxHeight: 800,
+                                    maxWidth: 1200)
+                                .then((file) async {
+                              Io.File compressedFile =
+                                  await FlutterNativeImage.compressImage(
+                                      file.path,
+                                      quality: 80,
+                                      percentage: 80,
+                                      targetHeight: 800,
+                                      targetWidth: 1200);
 
-                            var bytes = new Io.File(compressedFile.path);
-                            var image = bytes.readAsBytesSync();
-                            String base64Encode(List<int> image) =>
-                                base64.encode(image);
+                              var bytes = new Io.File(compressedFile.path);
+                              var image = bytes.readAsBytesSync();
+                              String base64Encode(List<int> image) =>
+                                  base64.encode(image);
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+
+                                bienvenuePageState.immo.image =
+                                    base64Encode(image);
+                                bienvenuePageState.immo.status =
+                                    bienvenuePageState.immo.code == ''
+                                        ? '3'
+                                        : '0';
+                                bienvenuePageState.immos_scanne
+                                    .add(bienvenuePageState.immo);
+                                setImmobilisationListFile(
+                                    bienvenuePageState.immo);
+                                setImmobilisationListFileJson(
+                                    bienvenuePageState.immo);
+                                bienvenuePageState.screenWelcome = 4;
+                                showDialogErrorSuccess(
+                                    context: context,
+                                    msg: "Immobilisation ajoutée avec succes.");
+                                sendDataRealTime();
+                              });
+                            });
+                          } else {
                             bienvenuePageState.setState(() {
                               bienvenuePageState.immo.dateTime =
                                   DateTime.now().toString();
 
-                              bienvenuePageState.immo.image =
-                                  base64Encode(image);
+                              bienvenuePageState.immo.image = '';
                               bienvenuePageState.immo.status =
                                   bienvenuePageState.immo.code == ''
                                       ? '3'
@@ -224,9 +275,9 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                               showDialogErrorSuccess(
                                   context: context,
                                   msg: "Immobilisation ajoutée avec succes.");
-                                  print('bienvenuePageState.immo.status => ${bienvenuePageState.immo.status}');
+                              sendDataRealTime();
                             });
-                          });
+                          }
                         }
                       },
                       child: Container(
@@ -245,7 +296,9 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
               ),
             ),
           )),
-      positionedBottumNav(size, 7)
+      bienvenuePageState.etat_du_bien
+          ? positionedBottumNav(size, 7)
+          : positionedBottumNav(size, 5)
     ],
   );
 }

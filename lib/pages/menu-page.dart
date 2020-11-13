@@ -190,6 +190,7 @@ menuPage(BuildContext context) {
                           etat: '');
                       bienvenuePageState.isNewImmo = true;
 
+                      bienvenuePageState.shwoCardRechercheCatalogue = true;
                       bienvenuePageState.screenWelcome = 5;
                     });
                   }

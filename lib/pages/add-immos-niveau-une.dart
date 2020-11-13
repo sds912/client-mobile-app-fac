@@ -1,15 +1,18 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/pages/bienvenue.dart';
+import 'package:v1/utils/shared-preference.dart';
+import 'package:v1/utils/web.dart';
 import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/top-navBar.dart';
 
 addImmosNiveauUn(context, Immobilisation immo) {
   Size size = MediaQuery.of(context).size;
   bienvenuePageState.setState(() {
-    bienvenuePageState.startScan =false ;
+    bienvenuePageState.startScan = false;
   });
-  int screen = immo.code=='' ? 4 : 3;
+  int screen = immo.code == '' ? 4 : 3;
   return Stack(
     children: [
       Container(
@@ -77,26 +80,21 @@ addImmosNiveauUn(context, Immobilisation immo) {
                     //     borderRadius: BorderRadius.circular(10),
                     //     color: Colors.grey[300],
                     //   ),
-                    //   child: TextField(
-                    //     textAlign: TextAlign.center,
-                    //     onChanged: (String value) {
-                    //       bienvenuePageState.setState(() {
-                    //         bienvenuePageState.immo.libelle = value;
-                    //       });
-                    //     },
-                    //     readOnly: true,
+                    //   child: SimpleAutoCompleteTextField(
+                    //     key: key,
+                    //     clearOnSubmit: true,
+                    //     textChanged: (text) => bienvenuePageState.setState(() {
+                    //       bienvenuePageState.immo.libelle = text;
+                    //     }),
                     //     decoration: InputDecoration(
-                    //         border: InputBorder.none,
-                    //         disabledBorder: InputBorder.none,
-                    //         hintText: immo.code == ""
-                    //             ? " CODE : AZSZEZSDEFDZZ"
-                    //             : " CODE : " + immo.code,
+                    //         enabledBorder: InputBorder.none,
+                    //         focusedBorder: InputBorder.none,
+                    //         hintText:
+                    //             immo.libelle == '' ? 'Libelle' : immo.libelle,
                     //         hintStyle:
                     //             TextStyle(fontSize: 16, color: Colors.black)),
+                    //     suggestions: bienvenuePageState.catalogue_recherche,
                     //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 30.0,
                     // ),
                     Container(
                       height: 45,
@@ -107,18 +105,25 @@ addImmosNiveauUn(context, Immobilisation immo) {
                       child: TextField(
                         textAlign: TextAlign.center,
                         onSubmitted: (t) {
-                            FocusScope.of(context).nextFocus();
+                          FocusScope.of(context).nextFocus();
+                          bienvenuePageState.setState(() {
+                            bienvenuePageState.shwoCardRechercheCatalogue = false;
+                          });
                         },
                         onChanged: (String value) {
                           bienvenuePageState.setState(() {
                             bienvenuePageState.immo.libelle = value;
+                            print(bienvenuePageState.immo.libelle);
+                            bienvenuePageState.shwoCardRechercheCatalogue = true;
                           });
+                          searchBydii(value, bienvenuePageState.catalogue_recherche);
                         },
+                        
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             hintText:
-                                immo.libelle == "" ? "Libellé" : immo.libelle,
+                                bienvenuePageState.immo.libelle == "" ? "Libellé" : bienvenuePageState.immo.libelle,
                             hintStyle:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                       ),
@@ -135,7 +140,7 @@ addImmosNiveauUn(context, Immobilisation immo) {
                       child: TextField(
                         textAlign: TextAlign.center,
                         onSubmitted: (t) {
-                            FocusScope.of(context).nextFocus();
+                          FocusScope.of(context).nextFocus();
                         },
                         onChanged: (String value) {
                           bienvenuePageState.setState(() {
@@ -163,7 +168,7 @@ addImmosNiveauUn(context, Immobilisation immo) {
                       child: TextField(
                         textAlign: TextAlign.center,
                         onSubmitted: (t) {
-                            FocusScope.of(context).unfocus();
+                          FocusScope.of(context).unfocus();
                         },
                         onChanged: (String value) {
                           bienvenuePageState.setState(() {
@@ -189,9 +194,42 @@ addImmosNiveauUn(context, Immobilisation immo) {
                       padding: const EdgeInsets.only(left: 32.0, right: 32.0),
                       child: GestureDetector(
                         onTap: () {
-                          bienvenuePageState.setState(() {
-                            bienvenuePageState.screenWelcome = 7;
-                          });
+                          if (!bienvenuePageState.etat_du_bien) {
+                            if (bienvenuePageState.immo.code != '') {
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.etat = '1';
+                                bienvenuePageState.immo.status = '0';
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
+                                bienvenuePageState.immo.emplacement_string =
+                                    bienvenuePageState.lastLocalite.nom;
+                                bienvenuePageState.immo.search_list =
+                                    bienvenuePageState.search_immo;
+                                bienvenuePageState.immo.emplacement_string =
+                                    bienvenuePageState.lastLocalite.nom;
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+                                bienvenuePageState.immos_scanne
+                                    .add(bienvenuePageState.immo);
+                                setImmobilisationListFile(
+                                    bienvenuePageState.immo);
+                                setImmobilisationListFileJson(
+                                    bienvenuePageState.immo);
+                                bienvenuePageState.screenWelcome = 6;
+                              });
+                              sendDataRealTime();
+                            } else {
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.etat = '1';
+                                bienvenuePageState.screenWelcome = 8;
+                              });
+                            }
+                          } else {
+                            bienvenuePageState.setState(() {
+                              bienvenuePageState.screenWelcome = 7;
+                            });
+                          }
                         },
                         child: Container(
                           height: 56.0,
@@ -203,13 +241,65 @@ addImmosNiveauUn(context, Immobilisation immo) {
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom,)
+                    SizedBox(
+                      height: MediaQuery.of(context).viewInsets.bottom,
+                    )
                   ],
                 ),
               ),
             ),
           )),
-      positionedBottumNav(size, screen)
+      positionedBottumNav(size, screen),
+      // bienvenuePageState.shwoCardRechercheCatalogue ? Positioned(
+      //   top: size.height * .45,
+      //   left: size.width * .25,
+      //   child: Card(
+          
+      //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      //     child: Container(
+      //       height: size.height * .2,
+      //       width: size.width * .5,
+      //       child: ListView(
+      //         children: listSelected(bienvenuePageState.catalogue_recherche_affichage),
+      //         physics: BouncingScrollPhysics(),
+      //       ),
+      //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+      //     ),
+      //   ),
+      // ) : Container(),
     ],
   );
+}
+
+listSelected(List l) {
+  List<Widget> li = [];
+  // print(l);
+  for (var item in l) {
+    li.add(GestureDetector(
+        onTap: () {
+          bienvenuePageState.setState(() {
+            bienvenuePageState.immo.libelle = item ;
+            // bienvenuePageState.shwoCardRechercheCatalogue = false ;
+          });
+        },
+        child: Container(
+            height: 45, width: 50 , child: Center(child: Text(item)))));
+  }
+  return li;
+}
+
+searchBydii(String str, List liste) {
+  List<String> new_list = [];
+
+  for (var item in liste) {
+    if (item.toString().toLowerCase().contains(str.toLowerCase())) {
+      new_list.add(item);
+    }
+  }
+
+
+
+  bienvenuePageState.setState(() {
+    bienvenuePageState.catalogue_recherche_affichage = new_list;
+  });
 }

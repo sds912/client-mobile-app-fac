@@ -28,7 +28,7 @@ stepPage(BuildContext context) {
                 fit: BoxFit.cover)),
       ),
       Positioned(
-          top: size.height * .03,
+          top: size.height * .0,
           left: size.width * .2,
           child: Container(
             height: size.height * .24,
@@ -39,7 +39,122 @@ stepPage(BuildContext context) {
           )),
       positionedTopNavbar(size),
       Positioned(
-          top: size.height * .17,
+        top: size.height * .17,
+        child: Container(
+          height: size.height * .15,
+          width: size.width,
+          child: Stack(
+            children: [
+              Container(
+                height: 50,
+                width: 300,
+              ),
+              Positioned(
+                top: 15,
+                child: Container(
+                  height: 35,
+                  // color: Colors.red,
+                  width: 300,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => showDialogErrorByTakeTofOrStatus(
+                            msg: 'Confirmer l\'etat du bien aprés chaque scan',
+                            context: context,
+                            fontSize: 12),
+                        icon: Container(
+                          height: size.height * .3,
+                          width: size.width * .3,
+                          // color: Colors.red,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/info_icon.png'))),
+                        ),
+                      ),
+                      Text(
+                        'Etat du Bien :   ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 5.0),
+                        child: Switch(
+                          value: bienvenuePageState.etat_du_bien,
+                          activeColor: Colors.green[700],
+                          onChanged: (l) {
+                            bienvenuePageState.setState(() {
+                              bienvenuePageState.etat_du_bien = l;
+                            });
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 60,
+                child: Container(
+                  height: 35,
+                  child: Container(
+                    height: 35,
+                    // color: Colors.red,
+                    width: 300,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => showDialogErrorByTakeTofOrStatus(
+                              msg:
+                                  'Prendre une image à chaque fois que vous scanner un bien en mauvais etat ou une nouvelle immobilisation ou une immobilisation non reconciliée',
+                              context: context,
+                              fontSize: 12),
+                          icon: Container(
+                            height: size.height * .3,
+                            width: size.width * .3,
+                            // color: Colors.red,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/info_icon.png'))),
+                          ),
+                        ),
+                        Text(
+                          'Prise d\'image:  ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, top: 5.0),
+                          child: Switch(
+                            value: bienvenuePageState.take_picture,
+                            activeColor: Colors.green[700],
+                            onChanged: (l) {
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.take_picture = l;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Positioned(
+          top: size.height * .32,
           left: size.width * .1,
           child: Container(
             height: size.height * .1,
@@ -51,61 +166,15 @@ stepPage(BuildContext context) {
                   : 'Procéder au comptage',
               style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 26,
+                  fontSize: bienvenuePageState.lastLocalite.id == '0' ? 24 : 26,
                   fontStyle: FontStyle.normal),
             )),
           )),
       Positioned(
-        top: size.height * .25,
+        top: size.height * .39,
         left: size.width * .075,
         child: buildStepLocalite(context),
       ),
-      !bienvenuePageState.isNewImmo
-          ? Positioned(
-              top: size.height * .74,
-              left: size.width * .5 - 24.0,
-              child: GestureDetector(
-                onTap: () {
-                  print(bienvenuePageState.libelle_localite.length);
-                  if (bienvenuePageState.libelle_localite.length ==
-                      bienvenuePageState.taille_libelle) {
-                    print(getIntNiveau(bienvenuePageState.lastLocalite.niveau));
-                    if (bienvenuePageState.lastLocalite.id == '0') {
-                      showDialogError(
-                          context: context,
-                          msg: "Veuiller choisir une Localité pour ajouter");
-                    } else {
-                      getCloseComptageZone(bienvenuePageState.lastLocalite)
-                          .then((verif) {
-                        if (verif) {
-                          showDialogErrorComptageDeblocage(
-                              context: context,
-                              msg:
-                                  "Cette localité a éte clôtureé . \n Voullez-vous le réouvrir ?");
-                        } else {
-                          bienvenuePageState.setState(() {
-                            bienvenuePageState.screenWelcome = 12;
-                          });
-                        }
-                      });
-                    }
-                  } else {
-                    showDialogError(
-                        context: context,
-                        msg:
-                            "Vous n’êtes pas autorisé à ajouter une localité. \nContacter votre superviseur.",
-                        fontSize: 18);
-                  }
-                },
-                child: Container(
-                  height: 48.0,
-                  width: 48.0,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/btn_plus.png'))),
-                ),
-              ))
-          : Container(),
       !bienvenuePageState.isNewImmo
           ? Positioned(
               top: size.height * .81,
@@ -127,6 +196,8 @@ stepPage(BuildContext context) {
                       } else {
                         bienvenuePageState.setState(() {
                           bienvenuePageState.screenWelcome = 6;
+                          bienvenuePageState.running
+                              .add(bienvenuePageState.lastLocalite.id);
                         });
                       }
                     });
@@ -153,8 +224,12 @@ stepPage(BuildContext context) {
                       bienvenuePageState.screenWelcome = 3;
                     });
                   } else {
+                    print(bienvenuePageState.lastLocalite.id);
+
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 5;
+                      bienvenuePageState.running
+                          .add(bienvenuePageState.lastLocalite.id);
                     });
                   }
                 },
