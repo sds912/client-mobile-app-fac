@@ -8,6 +8,7 @@ import 'package:v1/models/inventaire.dart';
 import 'package:v1/models/libelle_localite.dart';
 import 'package:v1/models/localites.dart';
 import 'package:v1/models/users.dart';
+import 'package:v1/pages/add-immo-niveau-une-catalogue.dart';
 import 'package:v1/pages/add-immos-niveau-deux.dart';
 import 'package:v1/pages/add-immos-niveau-trois.dart';
 import 'package:v1/pages/add-immos-niveau-une.dart';
@@ -47,7 +48,7 @@ class _BienvenuePageState extends State<BienvenuePage> {
 
   bool take_picture = true;
 
-  bool isNewVersionOfCode = true ;
+  bool isNewVersionOfCode = true;
 
   List<Widget> listeStepDrowDown = [];
 
@@ -112,7 +113,7 @@ class _BienvenuePageState extends State<BienvenuePage> {
 
   List<String> catalogue_recherche = [];
   List catalogue_recherche_affichage = [];
-  bool shwoCardRechercheCatalogue = true ;
+  bool shwoCardRechercheCatalogue = true;
 
   List<Immobilisation> immos_scanne = [];
   List<Immobilisation> immos_scanne_menu = [];
@@ -240,9 +241,9 @@ class _BienvenuePageState extends State<BienvenuePage> {
     verifIfApiIsAvailable().then((value) {
       bienvenuePageState.setState(() {
         bienvenuePageState.isWeb = value;
-          setState(() {
-            screenWelcome = 0;
-          });
+        setState(() {
+          screenWelcome = 0;
+        });
       });
     });
 
@@ -292,8 +293,8 @@ class _BienvenuePageState extends State<BienvenuePage> {
                         : screenWelcome == 4
                             ? menuPage(context)
                             : bienvenuePageState.screenWelcome == 5
-                                ? addImmosNiveauUn(
-                                    context, bienvenuePageState.immo)
+                                ? AddniveauUn(
+                                    immo: bienvenuePageState.immo)
                                 : bienvenuePageState.screenWelcome == 6
                                     ? listImmo(context)
                                     : bienvenuePageState.screenWelcome == 7
