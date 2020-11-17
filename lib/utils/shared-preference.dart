@@ -38,6 +38,7 @@ Future setWelcomeMessage() async => SharedPreferences.getInstance()
 
 setMembre(User user) async => SharedPreferences.getInstance()
     .then((prefs) => prefs.setString('userconnect', user.toString()));
+
 Future<User> getUserConnect() async =>
     SharedPreferences.getInstance().then((prefs) {
       if (prefs.getString('userconnect') != null) {
@@ -108,6 +109,29 @@ setInventaireExport(String value) async =>
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString('inventaireExport', value);
     });
+
+setListImmobilisationFileJson(List<Immobilisation> immos) async {
+  SharedPreferences.getInstance().then((prefs) {
+    prefs.remove('immobilisationsJson');
+    for (var immo in immos) {
+      var im = '';
+      if (immo.image == '') {
+        im = '';
+      } else {
+        im = 'data:image/jpeg;base64,${immo.image}';
+      }
+      var str =
+          '{"id" : ${immo.id}  , "libelle" : "${immo.libelle}" , "code" : "${immo.code}" , "emplacement" :"${immo.emplacement}" , "description":"${immo.description}", "etat" : "${immo.etat}" , "image" : "$im", "status" : ${immo.status} , "lecteur" : ${bienvenuePageState.user.id} , "date" : "${DateTime.now()}" }';
+      if (prefs.getString('immobilisationsJson') == null) {
+        prefs.setString('immobilisationsJson', str);
+      } else {
+        String new_listImmoJson =
+            prefs.getString('immobilisationsJson') + ',' + str;
+        prefs.setString('immobilisationsJson', new_listImmoJson);
+      }
+    }
+  });
+}
 
 Future getImmobilisationFileJson() async =>
     SharedPreferences.getInstance().then((prefs) {
@@ -390,4 +414,63 @@ Future<List<LibelleLocalite>> getListLibelleLocalite() =>
         }
         return liste;
       }
+    });
+
+Future<List> getListIdClose() async =>
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.getString('idListIdClose') == null) {
+        return [];
+      } else {
+        String DJ = prefs.getString('idListIdClose');
+        List<String> listIdClose = DJ.split('#deep_dose');
+        return listIdClose;
+      }
+    });
+
+setListIdClose(String id) async =>
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.getString('idListIdClose') == null) {
+        prefs.setString('idListIdClose', id);
+      } else {
+        prefs.setString(
+            'idListClose', prefs.getString('idListClose') + '#deep_dose' + id);
+      }
+    });
+
+setListIdRunning(String id) => SharedPreferences.getInstance().then((prefs) {
+      print('setListIdRunning => $id');
+      if (prefs.getString('idListIdRunning') == null) {
+        prefs.setString('idListIdRunning', id);
+      } else {
+        String str = prefs.getString('idListIdRunning') + '#deep_dose' + id;
+        prefs.setString('idListIdRunning', str);
+      }
+    });
+
+Future<List> getListIdRunning() async =>
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.getString('idListIdRunning') == null) {
+        return [];
+      } else {
+        String DJ = prefs.getString('idListIdRunning');
+        List<String> listIdClose = DJ.split('#deep_dose');
+        print(listIdClose);
+        return listIdClose;
+      }
+    });
+
+Future<String> getListIdRunningString() async =>
+    SharedPreferences.getInstance().then((value) {
+      String str = '';
+      getListIdRunning().then((liste) {
+        for (var i = 0; i < liste.length; i++) {
+          if (i == 0) {
+            str = liste[i];
+          } else {
+            str = str + ',' + liste[i];
+          }
+        }
+        print('getListIdRunningString => $str');
+        return str;
+      });
     });

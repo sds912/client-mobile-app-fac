@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:v1/models/catalogue.dart';
 import 'package:v1/models/entreprise.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/models/inventaire.dart';
 import 'package:v1/models/libelle_localite.dart';
 import 'package:v1/models/localites.dart';
 import 'package:v1/models/users.dart';
+import 'package:v1/pages/add-immo-niveau-une-catalogue.dart';
 import 'package:v1/pages/add-immos-niveau-deux.dart';
 import 'package:v1/pages/add-immos-niveau-trois.dart';
 import 'package:v1/pages/add-immos-niveau-une.dart';
@@ -29,6 +31,7 @@ import 'package:v1/pages/connection.dart';
 import 'package:v1/utils/shared-preference.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 import 'package:v1/utils/web.dart';
+import 'package:v1/widget/showDialogError.dart';
 
 _BienvenuePageState bienvenuePageState;
 
@@ -41,7 +44,16 @@ class BienvenuePage extends StatefulWidget {
 }
 
 class _BienvenuePageState extends State<BienvenuePage> {
+  bool etat_du_bien = false;
+
+  bool take_picture = false;
+
+  bool isNewVersionOfCode = true;
+
   List<Widget> listeStepDrowDown = [];
+
+  List<String> running = [];
+  List<String> closing = [];
 
   int taille_libelle = 0;
 
@@ -49,17 +61,17 @@ class _BienvenuePageState extends State<BienvenuePage> {
 
   String textDecodeTextEncode = '';
 
-  String texDecodeAffiche ='';
+  String texDecodeAffiche = '';
 
   String textDecodeResult = '';
 
-  String textDecodeRandom ='';
+  String textDecodeRandom = '';
 
-  String textDecodeIsValid ='';
+  String textDecodeIsValid = '';
 
-  bool isTailleLibDiff = true ;
+  bool isTailleLibDiff = true;
 
-  bool isListDRowDown = true ;
+  bool isListDRowDown = true;
 
   String search_immo;
 
@@ -96,6 +108,12 @@ class _BienvenuePageState extends State<BienvenuePage> {
   Inventaire inventaire;
 
   List<Immobilisation> immos = [];
+
+  List<Catalogue> catalogues = [];
+
+  List<String> catalogue_recherche = [];
+  List catalogue_recherche_affichage = [];
+  bool shwoCardRechercheCatalogue = true;
 
   List<Immobilisation> immos_scanne = [];
   List<Immobilisation> immos_scanne_menu = [];
@@ -203,11 +221,11 @@ class _BienvenuePageState extends State<BienvenuePage> {
   }
 
   showScreen() async {
-    Future.delayed(Duration(milliseconds: 100)).then((value) {
-      setState(() {
-        screenWelcome = 0;
-      });
-    });
+    // Future.delayed(Duration(milliseconds: 100)).then((value) {
+    //   setState(() {
+    //     screenWelcome = 0;
+    //   });
+    // });
 
     getCloseInventaire().then((verif) => bienvenuePageState.setState(() {
           bienvenuePageState.isCloseInv = verif;
@@ -223,6 +241,9 @@ class _BienvenuePageState extends State<BienvenuePage> {
     verifIfApiIsAvailable().then((value) {
       bienvenuePageState.setState(() {
         bienvenuePageState.isWeb = value;
+        setState(() {
+          screenWelcome = 0;
+        });
       });
     });
 
@@ -260,6 +281,7 @@ class _BienvenuePageState extends State<BienvenuePage> {
           elevation: 0,
           toolbarHeight: 0.05,
         ),
+        // floatingActionButton:  bienvenuePageState.screenWelcome == 6 ? FloatingActionButton(child: Icon(Icons.settings , size: 42,) , onPressed: () => showDialogParams(context: context), backgroundColor: Color.fromRGBO(45, 49, 66,1),) : null,
         body: screenWelcome == 0
             ? firstPage(context)
             : screenWelcome == 1
@@ -271,8 +293,8 @@ class _BienvenuePageState extends State<BienvenuePage> {
                         : screenWelcome == 4
                             ? menuPage(context)
                             : bienvenuePageState.screenWelcome == 5
-                                ? addImmosNiveauUn(
-                                    context, bienvenuePageState.immo)
+                                ? AddniveauUn(
+                                    immo: bienvenuePageState.immo)
                                 : bienvenuePageState.screenWelcome == 6
                                     ? listImmo(context)
                                     : bienvenuePageState.screenWelcome == 7

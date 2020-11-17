@@ -28,7 +28,7 @@ stepPage(BuildContext context) {
                 fit: BoxFit.cover)),
       ),
       Positioned(
-          top: size.height * .03,
+          top: size.height * .05,
           left: size.width * .2,
           child: Container(
             height: size.height * .24,
@@ -39,7 +39,7 @@ stepPage(BuildContext context) {
           )),
       positionedTopNavbar(size),
       Positioned(
-          top: size.height * .17,
+          top: size.height * .21,
           left: size.width * .1,
           child: Container(
             height: size.height * .1,
@@ -51,61 +51,15 @@ stepPage(BuildContext context) {
                   : 'Procéder au comptage',
               style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 26,
+                  fontSize: bienvenuePageState.lastLocalite.id == '0' ? 24 : 26,
                   fontStyle: FontStyle.normal),
             )),
           )),
       Positioned(
-        top: size.height * .25,
+        top: size.height * .3,
         left: size.width * .075,
         child: buildStepLocalite(context),
       ),
-      // !bienvenuePageState.isNewImmo
-      //     ? Positioned(
-      //         top: size.height * .74,
-      //         left: size.width * .5 - 24.0,
-      //         child: GestureDetector(
-      //           onTap: () {
-      //             print(bienvenuePageState.libelle_localite.length);
-      //             if (bienvenuePageState.libelle_localite.length ==
-      //                 bienvenuePageState.taille_libelle) {
-      //               print(getIntNiveau(bienvenuePageState.lastLocalite.niveau));
-      //               if (bienvenuePageState.lastLocalite.id == '0') {
-      //                 showDialogError(
-      //                     context: context,
-      //                     msg: "Veuiller choisir une Localité pour ajouter");
-      //               } else {
-      //                 getCloseComptageZone(bienvenuePageState.lastLocalite)
-      //                     .then((verif) {
-      //                   if (verif) {
-      //                     showDialogErrorComptageDeblocage(
-      //                         context: context,
-      //                         msg:
-      //                             "Cette localité a éte clôtureé . \n Voullez-vous le réouvrir ?");
-      //                   } else {
-      //                     bienvenuePageState.setState(() {
-      //                       bienvenuePageState.screenWelcome = 12;
-      //                     });
-      //                   }
-      //                 });
-      //               }
-      //             } else {
-      //               showDialogError(
-      //                   context: context,
-      //                   msg:
-      //                       "Vous n’êtes pas autorisé à ajouter une localité. \nContacter votre superviseur.",
-      //                   fontSize: 18);
-      //             }
-      //           },
-      //           child: Container(
-      //             height: 48.0,
-      //             width: 48.0,
-      //             decoration: BoxDecoration(
-      //                 image: DecorationImage(
-      //                     image: AssetImage('assets/images/btn_plus.png'))),
-      //           ),
-      //         ))
-      //     : Container(),
       !bienvenuePageState.isNewImmo
           ? Positioned(
               top: size.height * .81,
@@ -127,6 +81,8 @@ stepPage(BuildContext context) {
                       } else {
                         bienvenuePageState.setState(() {
                           bienvenuePageState.screenWelcome = 6;
+                          bienvenuePageState.running
+                              .add(bienvenuePageState.lastLocalite.id);
                         });
                       }
                     });
@@ -153,8 +109,12 @@ stepPage(BuildContext context) {
                       bienvenuePageState.screenWelcome = 3;
                     });
                   } else {
+                    print(bienvenuePageState.lastLocalite.id);
+
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 5;
+                      bienvenuePageState.running
+                          .add(bienvenuePageState.lastLocalite.id);
                     });
                   }
                 },

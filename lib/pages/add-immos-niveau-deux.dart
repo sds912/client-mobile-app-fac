@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
+import 'package:v1/utils/web.dart';
 import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/showDialogError.dart';
 import 'package:v1/widget/top-navBar.dart';
@@ -108,27 +109,60 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                             bienvenuePageState.screenWelcome = 8;
                             bienvenuePageState.immo.lecteur =
                                 bienvenuePageState.user.nom;
+                            sendDataRealTime();
                           });
                         } else {
-                          ImagePicker.pickImage(
-                                  source: ImageSource.camera,
-                                  maxHeight: 800,
-                                  maxWidth: 1200)
-                              .then((file) async {
-                            Io.File compressedFile =
-                                await FlutterNativeImage.compressImage(
-                              file.path,
-                              quality: 50,
-                              percentage: 50,
-                              targetHeight: 800,
-                              targetWidth: 1200
-                            );
+                          if (bienvenuePageState.take_picture) {
+                            ImagePicker.pickImage(
+                                    source: ImageSource.camera,
+                                    maxHeight: 800,
+                                    maxWidth: 1200)
+                                .then((file) async {
+                              Io.File compressedFile =
+                                  await FlutterNativeImage.compressImage(
+                                      file.path,
+                                      quality: 50,
+                                      percentage: 50,
+                                      targetHeight: 800,
+                                      targetWidth: 1200);
 
-                            var bytes = new Io.File(compressedFile.path);
-                            var image = bytes.readAsBytesSync();
-                            String base64Encode(List<int> image) =>
-                                base64.encode(image);
+                              var bytes = new Io.File(compressedFile.path);
+                              var image = bytes.readAsBytesSync();
+                              String base64Encode(List<int> image) =>
+                                  base64.encode(image);
 
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.etat = '1';
+                                bienvenuePageState.immo.status = '0';
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
+                                bienvenuePageState.immo.emplacement_string =
+                                    bienvenuePageState.lastLocalite.nom;
+                                bienvenuePageState.immo.lecteur =
+                                    bienvenuePageState.user.nom;
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+                                bienvenuePageState.immo.image =
+                                    base64Encode(image);
+                                bienvenuePageState.immo.search_list =
+                                    bienvenuePageState.search_immo;
+
+                                bienvenuePageState.screenWelcome = 6;
+                                bienvenuePageState.immos_scanne
+                                    .add(bienvenuePageState.immo);
+                                setImmobilisationListFile(
+                                    bienvenuePageState.immo);
+                                setImmobilisationListFileJson(
+                                    bienvenuePageState.immo);
+                                sendDataRealTime();
+
+                                showDialogErrorSuccess(
+                                    context: context,
+                                    msg: "Immobilisation ajouter avec succes.");
+                              });
+                            });
+                          } else {
                             bienvenuePageState.setState(() {
                               bienvenuePageState.immo.etat = '1';
                               bienvenuePageState.immo.status = '0';
@@ -140,8 +174,7 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.user.nom;
                               bienvenuePageState.immo.dateTime =
                                   DateTime.now().toString();
-                              bienvenuePageState.immo.image =
-                                  base64Encode(image);
+                              bienvenuePageState.immo.image = "";
                               bienvenuePageState.immo.search_list =
                                   bienvenuePageState.search_immo;
 
@@ -152,11 +185,13 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.immo);
                               setImmobilisationListFileJson(
                                   bienvenuePageState.immo);
+                              sendDataRealTime();
+
                               showDialogErrorSuccess(
                                   context: context,
                                   msg: "Immobilisation ajouter avec succes.");
                             });
-                          });
+                          }
                         }
                       },
                       child: Container(
@@ -174,24 +209,80 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        ImagePicker.pickImage(
-                                source: ImageSource.camera,
-                                maxHeight: 800,
+                        if (bienvenuePageState.take_picture) {
+                          ImagePicker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxHeight: 800,
                                   maxWidth: 1200)
-                            .then((file) async {
-                          Io.File compressedFile =
-                              await FlutterNativeImage.compressImage(
-                              file.path,
-                              quality: 80,
-                              percentage: 80,
-                              targetHeight: 800,
-                              targetWidth: 1200
-                          );
+                              .then((file) async {
+                            Io.File compressedFile =
+                                await FlutterNativeImage.compressImage(
+                                    file.path,
+                                    quality: 80,
+                                    percentage: 80,
+                                    targetHeight: 800,
+                                    targetWidth: 1200);
 
-                          var bytes = new Io.File(compressedFile.path);
-                          var image = bytes.readAsBytesSync();
-                          String base64Encode(List<int> image) =>
-                              base64.encode(image);
+                            var bytes = new Io.File(compressedFile.path);
+                            var image = bytes.readAsBytesSync();
+                            String base64Encode(List<int> image) =>
+                                base64.encode(image);
+                            if (bienvenuePageState.immo.code == '') {
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.etat = '0';
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
+                                bienvenuePageState.immo.emplacement_string =
+                                    bienvenuePageState.lastLocalite.nom;
+                                bienvenuePageState.immo.search_list =
+                                    bienvenuePageState.search_immo;
+
+                                bienvenuePageState.immo.lecteur =
+                                    bienvenuePageState.user.nom;
+
+                                bienvenuePageState.immo.image =
+                                    base64Encode(image);
+                                sendDataRealTime();
+
+                                bienvenuePageState.screenWelcome = 8;
+                              });
+                            } else {
+                              bienvenuePageState.setState(() {
+                                bienvenuePageState.immo.etat = '0';
+                                bienvenuePageState.immo.status = '0';
+                                bienvenuePageState.immo.dateTime =
+                                    DateTime.now().toString();
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
+                                bienvenuePageState.immo.emplacement_string =
+                                    bienvenuePageState.lastLocalite.nom;
+                                bienvenuePageState.immo.lecteur =
+                                    bienvenuePageState.user.nom;
+                                bienvenuePageState.immo.search_list =
+                                    bienvenuePageState.search_immo;
+
+                                bienvenuePageState.immo.image =
+                                    base64Encode(image);
+                                bienvenuePageState.screenWelcome = 6;
+                                bienvenuePageState.immos_scanne
+                                    .add(bienvenuePageState.immo);
+                                setImmobilisationListFile(
+                                    bienvenuePageState.immo);
+                                setImmobilisationListFileJson(
+                                    bienvenuePageState.immo);
+                                sendDataRealTime();
+
+                                showDialogErrorSuccess(
+                                    context: context,
+                                    msg: "Immobilisation ajoutée avec succes.");
+                              });
+                            }
+                          });
+                        } else {
                           if (bienvenuePageState.immo.code == '') {
                             bienvenuePageState.setState(() {
                               bienvenuePageState.immo.etat = '0';
@@ -207,8 +298,7 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                               bienvenuePageState.immo.lecteur =
                                   bienvenuePageState.user.nom;
 
-                              bienvenuePageState.immo.image =
-                                  base64Encode(image);
+                              bienvenuePageState.immo.image = "";
                               bienvenuePageState.screenWelcome = 8;
                             });
                           } else {
@@ -225,9 +315,7 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.user.nom;
                               bienvenuePageState.immo.search_list =
                                   bienvenuePageState.search_immo;
-
-                              bienvenuePageState.immo.image =
-                                  base64Encode(image);
+                              bienvenuePageState.immo.image = "";
                               bienvenuePageState.screenWelcome = 6;
                               bienvenuePageState.immos_scanne
                                   .add(bienvenuePageState.immo);
@@ -235,13 +323,14 @@ addImmoNiveauDeux(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.immo);
                               setImmobilisationListFileJson(
                                   bienvenuePageState.immo);
+                              sendDataRealTime();
+
                               showDialogErrorSuccess(
                                   context: context,
                                   msg: "Immobilisation ajoutée avec succes.");
                             });
                           }
-                        });
-                        print(bienvenuePageState.immo);
+                        }
                       },
                       child: Container(
                         height: 56.0,
