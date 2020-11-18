@@ -8,7 +8,7 @@ import 'package:v1/models/inventaire.dart';
 import 'package:v1/models/libelle_localite.dart';
 import 'package:v1/models/localites.dart';
 import 'package:v1/models/users.dart';
-import 'package:v1/pages/add-immo-niveau-une-catalogue.dart';
+// import 'package:v1/pages/add-immo-niveau-une-catalogue.dart';
 import 'package:v1/pages/add-immos-niveau-deux.dart';
 import 'package:v1/pages/add-immos-niveau-trois.dart';
 import 'package:v1/pages/add-immos-niveau-une.dart';
@@ -29,9 +29,9 @@ import 'package:v1/pages/step-page.dart';
 import 'package:v1/pages/upload-file.dart';
 import 'package:v1/pages/connection.dart';
 import 'package:v1/utils/shared-preference.dart';
-import 'package:imei_plugin/imei_plugin.dart';
+// import 'package:imei_plugin/imei_plugin.dart';
 import 'package:v1/utils/web.dart';
-import 'package:v1/widget/showDialogError.dart';
+// import 'package:v1/widget/showDialogError.dart';
 
 _BienvenuePageState bienvenuePageState;
 
@@ -46,7 +46,7 @@ class BienvenuePage extends StatefulWidget {
 class _BienvenuePageState extends State<BienvenuePage> {
   bool etat_du_bien = false;
 
-  bool take_picture = false;
+  bool take_picture = true;
 
   bool isNewVersionOfCode = true;
 
@@ -234,9 +234,9 @@ class _BienvenuePageState extends State<BienvenuePage> {
           bienvenuePageState.immos_scanne = value;
         }));
 
-    await ImeiPlugin.getImei().then((value) => bienvenuePageState.setState(() {
-          bienvenuePageState.imei = value;
-        }));
+    // await ImeiPlugin.getImei().then((value) => bienvenuePageState.setState(() {
+    //       bienvenuePageState.imei = value;
+    //     }));
 
     verifIfApiIsAvailable().then((value) {
       bienvenuePageState.setState(() {

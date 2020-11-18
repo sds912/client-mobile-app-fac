@@ -102,6 +102,8 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                                 bienvenuePageState.immo.code == '' ? '2' : '0';
                             bienvenuePageState.immos_scanne
                                 .add(bienvenuePageState.immo);
+                            bienvenuePageState.immo.emplacement =
+                                bienvenuePageState.lastLocalite.id.toString();
                             setImmobilisationListFile(bienvenuePageState.immo);
                             setImmobilisationListFileJson(
                                 bienvenuePageState.immo);
@@ -134,6 +136,9 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                               bienvenuePageState.setState(() {
                                 bienvenuePageState.immo.dateTime =
                                     DateTime.now().toString();
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
 
                                 bienvenuePageState.immo.image =
                                     base64Encode(image);
@@ -165,6 +170,8 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.immo.code == ''
                                       ? '2'
                                       : '0';
+                              bienvenuePageState.immo.emplacement =
+                                  bienvenuePageState.lastLocalite.id.toString();
                               bienvenuePageState.immos_scanne
                                   .add(bienvenuePageState.immo);
                               setImmobilisationListFile(
@@ -203,6 +210,8 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
 
                             bienvenuePageState.immo.status =
                                 bienvenuePageState.immo.code == '' ? '2' : '0';
+                            bienvenuePageState.immo.emplacement =
+                                bienvenuePageState.lastLocalite.id.toString();
 
                             bienvenuePageState.screenWelcome = 4;
                             setImmobilisationListFile(bienvenuePageState.immo);
@@ -242,6 +251,9 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                                     bienvenuePageState.immo.code == ''
                                         ? '3'
                                         : '0';
+                                bienvenuePageState.immo.emplacement =
+                                    bienvenuePageState.lastLocalite.id
+                                        .toString();
                                 bienvenuePageState.immos_scanne
                                     .add(bienvenuePageState.immo);
                                 setImmobilisationListFile(
@@ -265,6 +277,8 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                                   bienvenuePageState.immo.code == ''
                                       ? '3'
                                       : '0';
+                              bienvenuePageState.immo.emplacement =
+                                  bienvenuePageState.lastLocalite.id.toString();
                               bienvenuePageState.immos_scanne
                                   .add(bienvenuePageState.immo);
                               setImmobilisationListFile(

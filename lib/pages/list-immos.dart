@@ -17,7 +17,7 @@ import 'package:v1/widget/top-navBar.dart';
 
 import 'dart:io' as Io;
 
-int i = 0;
+// int i = 0;
 
 listImmo(context) {
   Size size = MediaQuery.of(context).size;
@@ -402,7 +402,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                       children: [
                         Text(
                           item.libelle.length > 12
-                              ? item.libelle.substring(0, 12)
+                              ? item.libelle.substring(0, 10)
                               : item.libelle,
                           style: GoogleFonts.averiaSerifLibre(
                               fontSize: 10, fontWeight: FontWeight.w300),
@@ -435,11 +435,11 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                             color: Colors.green,
                           )
                         : Icon(
-                            Icons.indeterminate_check_box,
+                            Icons.check_box_outline_blank,
                             color: Colors.red,
                           )),
                 onTap: () {
-                  if (item.etat == '1' && item.image=='') {
+                  if (item.etat == '1' && item.image == '') {
                     ImagePicker.pickImage(
                             source: ImageSource.camera,
                             maxHeight: 800,
@@ -469,6 +469,8 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                                     element.dateTime == item.dateTime)]
                             .image = base64Encode(image);
                       });
+                      setImmobilisationListFile(bienvenuePageState.immo);
+
                       setListImmobilisationFileJson(
                           bienvenuePageState.immos_scanne);
 
@@ -510,7 +512,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                       children: [
                         Text(
                           item.libelle.length > 12
-                              ? item.libelle.substring(0, 12)
+                              ? item.libelle.substring(0, 10)
                               : item.libelle,
                           style: GoogleFonts.averiaSerifLibre(
                               fontSize: 10, fontWeight: FontWeight.w300),
@@ -543,11 +545,11 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                             color: Colors.green,
                           )
                         : Icon(
-                            Icons.indeterminate_check_box,
+                            Icons.check_box_outline_blank,
                             color: Colors.red,
                           )),
                 onTap: () {
-                  if (item.etat == '1' && item.image=='') {
+                  if (item.etat == '1' && item.image == '') {
                     ImagePicker.pickImage(
                             source: ImageSource.camera,
                             maxHeight: 800,
@@ -577,6 +579,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                                     element.dateTime == item.dateTime)]
                             .image = base64Encode(image);
                       });
+                      setImmobilisationListFile(bienvenuePageState.immo);
                       setListImmobilisationFileJson(
                           bienvenuePageState.immos_scanne);
 

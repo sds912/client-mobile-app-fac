@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
 import 'package:v1/utils/web.dart';
 import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/top-navBar.dart';
+import 'dart:io' as Io;
+
 
 class AddniveauUn extends StatefulWidget {
   final Immobilisation immo;
@@ -188,7 +194,23 @@ class _AddniveauUnState extends State<AddniveauUn> {
                           onTap: () {
                             if (!bienvenuePageState.etat_du_bien) {
                               if (bienvenuePageState.immo.code != '') {
-                                bienvenuePageState.setState(() {
+                                ImagePicker.pickImage(
+                                        source: ImageSource.camera,
+                                        maxHeight: 800,
+                                        maxWidth: 1200)
+                                    .then((file) async {
+                                  Io.File compressedFile =
+                                      await FlutterNativeImage.compressImage(
+                                          file.path,
+                                          quality: 80,
+                                          percentage: 80,
+                                          targetHeight: 800,
+                                          targetWidth: 1200);
+                                  var bytes = new Io.File(compressedFile.path);
+                                  var image = bytes.readAsBytesSync();
+                                  String base64Encode(List<int> image) =>
+                                      base64.encode(image);
+                                    bienvenuePageState.setState(() {
                                   bienvenuePageState.immo.etat = '1';
                                   bienvenuePageState.immo.status = '0';
                                   bienvenuePageState.immo.emplacement =
@@ -200,6 +222,7 @@ class _AddniveauUnState extends State<AddniveauUn> {
                                       bienvenuePageState.search_immo;
                                   bienvenuePageState.immo.emplacement_string =
                                       bienvenuePageState.lastLocalite.nom;
+                                      bienvenuePageState.immo.image = base64Encode(image);
                                   bienvenuePageState.immo.dateTime =
                                       DateTime.now().toString();
                                   bienvenuePageState.immos_scanne
@@ -211,6 +234,9 @@ class _AddniveauUnState extends State<AddniveauUn> {
                                   bienvenuePageState.screenWelcome = 6;
                                 });
                                 sendDataRealTime();
+                                });
+
+                                
                               } else {
                                 bienvenuePageState.setState(() {
                                   bienvenuePageState.immo.etat = '1';

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
 
-const base_url = 'https://d1f8162bd84c.ngrok.io/api'; //ENLEVER LES SS
+const base_url = 'https://6e5e03ba9135.ngrok.io/api'; //ENLEVER LES SS
 
 verifIfApiIsAvailable() async {
   return http.get(base_url).then(((req) async {

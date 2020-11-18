@@ -31,7 +31,7 @@ dependencies:
   flutter_mailer: ^0.4.1+1
   image_picker: ^0.6.7+9
   google_fonts: ^1.1.0
-  imei_plugin: ^1.2.0
+  # imei_plugin: ^1.2.0
   flutter_native_image: ^0.0.5
   toggle_switch: ^0.1.8
   autocomplete_textfield: ^1.7.3
