@@ -46,14 +46,14 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.8.0
 
-flutter_icons:
-  ios: true
-  android: "launcher_icon"
-  image_path: "assets/images/new_logo.png"
-  image_path_ios: "assets/images/new_logo.png"
-  image_path_android: "assets/images/new_logo.png"
-  adaptive_icon_background: "assets/images/new_logo.png"
-  adaptive_icon_foreground: "assets/images/new_logo.png"
+# flutter_icons:
+#   ios: true
+#   android: "launcher_icon"
+#   image_path: "assets/images/new_logo.png"
+#   image_path_ios: "assets/images/new_logo.png"
+#   image_path_android: "assets/images/new_logo.png"
+#   adaptive_icon_background: "assets/images/new_logo.png"
+#   adaptive_icon_foreground: "assets/images/new_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

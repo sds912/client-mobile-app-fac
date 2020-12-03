@@ -40,7 +40,7 @@ choiceEntreprise(BuildContext context) {
             // color: Colors.green,
             child: Center(
               child: Text(
-                'Veuillez choisir l\'entreprise pour débuter ',
+                'Veuillez choisir l\'entité pour débuter ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,

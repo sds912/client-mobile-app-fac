@@ -33,7 +33,7 @@ connectDoc(BuildContext context) async {
               print(verif);
               UtilsHttp.getByIssa('/info').then((value) {
                 var info = json.decode(value.data);
-                print(info);
+                // print(info);
                 bienvenuePageState.setState(() {
                   bienvenuePageState.user = User.fromJsonOne(info[0]);
                   if (bienvenuePageState.user.entreprisess.length > 1) {
@@ -43,13 +43,16 @@ connectDoc(BuildContext context) async {
                     });
                   } else {
                     print(bienvenuePageState.user.entreprisess);
+
                     UtilsHttp.getByIssa(
                             '/mobile-inventaire/${bienvenuePageState.user.entreprisess.first.id}')
                         .then((value) {
                       var data = json.decode(value.data);
+                      // print(value);
                       bienvenuePageState.setState(() {
                         bienvenuePageState.immos =
                             Immobilisation.fromJson(data);
+                            print('bienvenuePageState.immos.length => ${bienvenuePageState.immos.length}');
                         bienvenuePageState.inventaire =
                             Inventaire.fromJson(data);
                         bienvenuePageState.catalogues = Catalogue.fromJson(data);

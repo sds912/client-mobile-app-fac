@@ -9,6 +9,7 @@ import 'package:v1/models/localites.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/colors.dart';
 import 'package:v1/utils/dropdown/entreprise.dart';
+import 'package:v1/utils/shared-preference.dart';
 import 'package:v1/utils/text-utils.dart';
 import 'package:v1/utils/web.dart';
 
@@ -49,6 +50,7 @@ choiceEntrepriseHelper(BuildContext context) {
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = -1;
                     });
+
                     await UtilsHttp.getByIssa('/mobile-inventaire/${t.id}')
                         .then((value) {
                       var data = json.decode(value.data);

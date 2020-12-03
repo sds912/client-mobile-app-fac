@@ -227,12 +227,12 @@ class _BienvenuePageState extends State<BienvenuePage> {
     //   });
     // });
 
-    getCloseInventaire().then((verif) => bienvenuePageState.setState(() {
-          bienvenuePageState.isCloseInv = verif;
-        }));
-    getImmobilisationListFile().then((value) => bienvenuePageState.setState(() {
-          bienvenuePageState.immos_scanne = value;
-        }));
+    // getCloseInventaire().then((verif) => bienvenuePageState.setState(() {
+    //       bienvenuePageState.isCloseInv = verif;
+    //     }));
+    // getImmobilisationListFile().then((value) => bienvenuePageState.setState(() {
+    //       bienvenuePageState.immos_scanne = value;
+    //     }));
 
     // await ImeiPlugin.getImei().then((value) => bienvenuePageState.setState(() {
     //       bienvenuePageState.imei = value;
@@ -247,16 +247,16 @@ class _BienvenuePageState extends State<BienvenuePage> {
       });
     });
 
-    getIdLocalite().then((value) => bienvenuePageState.setState(() {
-          bienvenuePageState.idLocaliteLastAdd = value;
-        }));
+    // getIdLocalite().then((value) => bienvenuePageState.setState(() {
+    //       bienvenuePageState.idLocaliteLastAdd = value;
+    //     }));
 
-    getListLibelleLocalite().then((liste) {
-      bienvenuePageState.setState(() {
-        bienvenuePageState.libelle_localite.addAll(liste);
-        print(bienvenuePageState.libelle_localite);
-      });
-    });
+    // getListLibelleLocalite().then((liste) {
+    //   bienvenuePageState.setState(() {
+    //     bienvenuePageState.libelle_localite.addAll(liste);
+    //     print(bienvenuePageState.libelle_localite);
+    //   });
+    // });
   }
 
   cleanEmailPassword() {

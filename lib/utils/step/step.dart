@@ -160,7 +160,7 @@ step(BuildContext context) {
                                             1]
                                         .libelle
                                     : bienvenuePageState
-                                        .libelle_localite[2].libelle;
+                                        .libelle_localite[0].libelle;
                             bienvenuePageState.lastLocalite = t;
                             bienvenuePageState.lastLocalite.niveau =
                                 bienvenuePageState.lastLibelle;
@@ -178,7 +178,7 @@ step(BuildContext context) {
                         icon: Container(),
                         hint: bienvenuePageState.niveauUnLocalite.nom == ''
                             ? Text(subStringBydii(
-                                bienvenuePageState.libelle_localite[1].libelle,
+                                bienvenuePageState.libelle_localite[0].libelle,
                                 20))
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauUnLocalite.nom, 20)),
