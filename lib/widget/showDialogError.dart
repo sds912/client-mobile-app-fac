@@ -41,7 +41,7 @@ showDialogError({BuildContext context, String msg, double fontSize = 14.0}) {
           child: Column(
             children: [
               Container(
-                height: fontSize <= 14.0 ? 50.0: 75.0,
+                height: fontSize <= 14.0 ? 50.0 : 75.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/alert_info.png'))),
@@ -68,7 +68,8 @@ showDialogError({BuildContext context, String msg, double fontSize = 14.0}) {
       ));
 }
 
-showDialogErrorByTakeTofOrStatus({BuildContext context, String msg, double fontSize = 14.0}) {
+showDialogErrorByTakeTofOrStatus(
+    {BuildContext context, String msg, double fontSize = 14.0}) {
   // bienvenuePageState.setState(() {
   //   bienvenuePageState.screenWelcome = 6 ;
   // });
@@ -103,13 +104,14 @@ showDialogErrorByTakeTofOrStatus({BuildContext context, String msg, double fontS
           child: Column(
             children: [
               Container(
-                height: fontSize <= 14.0 ? 35.0: 75.0,
+                height: fontSize <= 14.0 ? 35.0 : 75.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/icon_info_color.png'))),
+                        image:
+                            AssetImage('assets/images/icon_info_color.png'))),
               ),
               Container(
-                height:  60.0,
+                height: 60.0,
                 child: Text(
                   msg,
                   textAlign: TextAlign.start,
@@ -124,6 +126,7 @@ showDialogErrorByTakeTofOrStatus({BuildContext context, String msg, double fontS
         ),
       ));
 }
+
 showDialogErrorSuccess(
     {BuildContext context, String msg, double fontSize = 14.0}) {
   // bienvenuePageState.setState(() {
@@ -218,72 +221,82 @@ showDialogErrorComptage(
           ),
         ),
         actions: [
-          RaisedButton(
-            color: Colors.grey[200],
-            onPressed: () => Navigator.pop(context),
-            child: Container(
-                width: 64.0, child: Text('Non', textAlign: TextAlign.center)),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: Container(
+                width: 72.0,
+                height: 32.0,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/non.png') , fit: BoxFit.contain)),
+              ),
+            ),
           ),
           SizedBox(
-            width: 64.0,
+            width: 40.0,
           ),
-          RaisedButton(
-            color: Colors.orange[700],
-            onPressed: () {
-
+          GestureDetector(
+            // color: Colors.orange[700],
+            onTap: () {
               setCloseComptageZone(bienvenuePageState.lastLocalite)
-                    .then((verif) {
-              if (verif) {
-                bienvenuePageState.setState(() {
-                  bienvenuePageState.screenWelcome = 3;
-                  bienvenuePageState.closing.add(bienvenuePageState.lastLocalite.id);
-                  setListIdClose(bienvenuePageState.lastLocalite.id.toString());
-                  Navigator.pop(context);
-                  showDialogError(
-                      context: context,
-                      msg:
-                          'Vous avez fermé le comptage  de cette zone : ${bienvenuePageState.lastLocalite.nom}');
-                });
-              }
-            });
+                  .then((verif) {
+                if (verif) {
+                  bienvenuePageState.setState(() {
+                    bienvenuePageState.screenWelcome = 3;
+                    bienvenuePageState.closing
+                        .add(bienvenuePageState.lastLocalite.id);
+                    setListIdClose(
+                        bienvenuePageState.lastLocalite.id.toString());
+                    Navigator.pop(context);
+                    showDialogError(
+                        context: context,
+                        msg:
+                            'Vous avez fermé le comptage  de cette zone : ${bienvenuePageState.lastLocalite.nom}');
+                  });
+                }
+              });
             },
-            child: Container(
-                width: 64.0,
-                child: Text(
-                  'Oui',
-                  textAlign: TextAlign.center,
-                )),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: Container(
+                width: 72.0,
+                height: 32.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/oui.png'),
+                      fit: BoxFit.contain),
+                  // color: Colors.red
+                ),
+              ),
+            ),
           ),
           SizedBox(
             width: 8.0,
           ),
         ],
         content: Container(
-          height: fontSize <= 14.0 ? 150.0 : 200.0,
+          height: 100,
           width: 250.0,
+          // color: Colors.red,
           child: Column(
             children: [
               Container(
-                height: 75.0,
+                height: 55.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/alert_info.png'))),
+                        image: AssetImage('assets/images/alert_info.png') , fit: BoxFit.contain)),
               ),
               SizedBox(
                 height: 10.0,
               ),
               Container(
-                height: fontSize <= 14.0 ? 32.0 : 64.0,
-                child: Center(
-                  child: Text(
-                    msg,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.averiaSansLibre(fontSize: fontSize),
-                  ),
+                height:  20.0 ,
+                width: 200,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/text_cloture.png') , fit: BoxFit.contain)
                 ),
-              ),
-              SizedBox(
-                height: 10.0,
               ),
             ],
           ),
@@ -319,18 +332,25 @@ showDialogErrorComptageDeblocage(
           ),
         ),
         actions: [
-          RaisedButton(
-            color: Colors.grey[200],
-            onPressed: () => Navigator.pop(context),
-            child: Container(
-                width: 64.0, child: Text('Non', textAlign: TextAlign.center)),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: Container(
+                width: 72.0,
+                height: 32.0,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/non.png') , fit: BoxFit.contain)),
+              ),
+            ),
           ),
           SizedBox(
-            width: 64.0,
+            width: 40.0,
           ),
-          RaisedButton(
-            color: Colors.orange[700],
-            onPressed: () =>
+          GestureDetector(
+            // color: Colors.orange[700],
+            onTap: () =>
                 getCloseComptageZone(bienvenuePageState.lastLocalite)
                     .then((verif) {
               if (verif) {
@@ -340,12 +360,19 @@ showDialogErrorComptageDeblocage(
                 });
               }
             }),
-            child: Container(
-                width: 64.0,
-                child: Text(
-                  'Oui',
-                  textAlign: TextAlign.center,
-                )),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: Container(
+                width: 72.0,
+                height: 32.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/oui.png'),
+                      fit: BoxFit.contain),
+                  // color: Colors.red
+                ),
+              ),
+            ),
           ),
           SizedBox(
             width: 8.0,
@@ -357,7 +384,7 @@ showDialogErrorComptageDeblocage(
           child: Column(
             children: [
               Container(
-                height: 75.0,
+                height: 60.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/alert_info.png'))),
@@ -365,13 +392,16 @@ showDialogErrorComptageDeblocage(
               SizedBox(
                 height: 10.0,
               ),
-              Container(
-                height: fontSize <= 14.0 ? 32.0 : 64.0,
-                child: Center(
-                  child: Text(
-                    msg,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.averiaSansLibre(fontSize: fontSize),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8 , vertical: 12),
+                child: Container(
+                  height: fontSize <= 14.0 ? 32.0 : 32.0,
+                  child: Center(
+                    child: Text(
+                      msg,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.averiaSansLibre(fontSize: fontSize , wordSpacing: 0),
+                    ),
                   ),
                 ),
               ),
@@ -448,7 +478,8 @@ showDialogParams({BuildContext context}) => showDialog(
                               cornerRadius: 5,
                               minHeight: 20,
                               // icons: [Icons.settings],
-                              initialLabelIndex: bienvenuePageState.etat_du_bien ? 0 : 1,
+                              initialLabelIndex:
+                                  bienvenuePageState.etat_du_bien ? 0 : 1,
                               activeBgColor: Colors.orange[700],
                               activeFgColor: Colors.white,
                               inactiveBgColor: Colors.grey,
@@ -456,7 +487,7 @@ showDialogParams({BuildContext context}) => showDialog(
                               labels: ['Bon', 'Mauvais'],
                               onToggle: (index) {
                                 bienvenuePageState.setState(() {
-                                  bienvenuePageState.etat_du_bien = index==0;
+                                  bienvenuePageState.etat_du_bien = index == 0;
                                 });
                               },
                             )
@@ -491,7 +522,8 @@ showDialogParams({BuildContext context}) => showDialog(
                                 cornerRadius: 5,
                                 minHeight: 20,
                                 // icons: [Icons.settings],
-                                initialLabelIndex: bienvenuePageState.take_picture ? 0 : 1,
+                                initialLabelIndex:
+                                    bienvenuePageState.take_picture ? 0 : 1,
                                 activeBgColor: Colors.orange[700],
                                 activeFgColor: Colors.white,
                                 inactiveBgColor: Colors.grey,
@@ -499,7 +531,8 @@ showDialogParams({BuildContext context}) => showDialog(
                                 labels: ['Oui', 'Non'],
                                 onToggle: (index) {
                                   bienvenuePageState.setState(() {
-                                    bienvenuePageState.take_picture = index==0;
+                                    bienvenuePageState.take_picture =
+                                        index == 0;
                                   });
                                 },
                               )

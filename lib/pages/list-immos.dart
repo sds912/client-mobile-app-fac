@@ -137,6 +137,7 @@ listImmo(context) {
           enabled: true,
           autofocus: true,
           onSubmitted: (t) {
+            print('deuxieme texfield');
             _controller.text = '';
             if (bienvenuePageState.lastLocalite.id != 0) {
               for (var immo in bienvenuePageState.immos) {
@@ -334,7 +335,7 @@ listImmo(context) {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                           image: AssetImage(
-                              'assets/images/clotuer_comptage.png'))),
+                              'assets/images/cloturer_zone.png'))),
                 ),
               ))
           : getUserRoleBool(bienvenuePageState.user) &&
@@ -435,7 +436,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                             color: Colors.green,
                           )
                         : Icon(
-                            Icons.check_box_outline_blank,
+                            Icons.stop_rounded,
                             color: Colors.red,
                           )),
                 onTap: () {
@@ -545,7 +546,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                             color: Colors.green,
                           )
                         : Icon(
-                            Icons.check_box_outline_blank,
+                            Icons.stop_rounded,
                             color: Colors.red,
                           )),
                 onTap: () {

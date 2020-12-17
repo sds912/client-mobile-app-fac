@@ -77,7 +77,7 @@ stepPage(BuildContext context) {
                         showDialogErrorComptageDeblocage(
                             context: context,
                             msg:
-                                " Le comptage dans cette localité a été clôturé. Voulez vous le réouvrir ?");
+                                " Le comptage dans cette zone a été clôturé. Voulez vous le réouvrir ?");
                       } else {
                         bienvenuePageState.setState(() {
                           bienvenuePageState.screenWelcome = 6;

@@ -43,7 +43,22 @@ connectDoc(BuildContext context) async {
                     });
                   } else {
                     print(bienvenuePageState.user.entreprisess);
-
+                    UtilsHttp.getByIssa(
+                                '/mobile-locality/${bienvenuePageState.user.entreprisess.first.id}')
+                            .then((value) {
+                          var data = json.decode(value.data);
+                          bienvenuePageState.setState(() {
+                            bienvenuePageState.libelle_localite =
+                                LibelleLocalite.fromJson(data);
+                            bienvenuePageState.listeLocalites =
+                                Localites.fromJson(data);
+                          });
+                          for (var item in data['idOfMyLoAffectes']) {
+                            bienvenuePageState.user.localites
+                                .add(item.toString());
+                          }
+                          // bienvenuePageState.screenWelcome = 4;
+                        });
                     UtilsHttp.getByIssa(
                             '/mobile-inventaire/${bienvenuePageState.user.entreprisess.first.id}')
                         .then((value) {
@@ -52,30 +67,19 @@ connectDoc(BuildContext context) async {
                       bienvenuePageState.setState(() {
                         bienvenuePageState.immos =
                             Immobilisation.fromJson(data);
-                            print('bienvenuePageState.immos.length => ${bienvenuePageState.immos.length}');
+                        print(
+                            'bienvenuePageState.immos.length => ${bienvenuePageState.immos.length}');
                         bienvenuePageState.inventaire =
                             Inventaire.fromJson(data);
-                        bienvenuePageState.catalogues = Catalogue.fromJson(data);
+                        bienvenuePageState.catalogues =
+                            Catalogue.fromJson(data);
                         for (var item in bienvenuePageState.catalogues) {
-                          bienvenuePageState.catalogue_recherche.add(item.libelle);
+                          bienvenuePageState.catalogue_recherche
+                              .add(item.libelle);
                         }
-                      });
-                    });
-                    UtilsHttp.getByIssa(
-                            '/mobile-locality/${bienvenuePageState.user.entreprisess.first.id}')
-                        .then((value) {
-                      var data = json.decode(value.data);
-                      bienvenuePageState.setState(() {
-                        bienvenuePageState.libelle_localite =
-                            LibelleLocalite.fromJson(data);
-                        bienvenuePageState.listeLocalites =
-                            Localites.fromJson(data);
+                        bienvenuePageState.screenWelcome = 4;
                         
                       });
-                      for (var item in data['idOfMyLoAffectes']) {
-                        bienvenuePageState.user.localites.add(item.toString());
-                      }
-                      bienvenuePageState.screenWelcome = 4;
                     });
                   }
                 });

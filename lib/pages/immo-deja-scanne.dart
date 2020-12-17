@@ -7,6 +7,7 @@ import 'package:v1/widget/bottum-nav.dart';
 import 'package:v1/widget/top-navBar.dart';
 
 immoDejaImmobilisation(BuildContext context, Immobilisation immo) {
+  print(immo);
   Size size = MediaQuery.of(context).size;
   return Stack(
     children: [
@@ -45,7 +46,7 @@ immoDejaImmobilisation(BuildContext context, Immobilisation immo) {
             // color: Colors.green,
             child: Center(
               child: Text(
-                '${subStringBydii(immo.libelle, 20)} ',
+                '${subStringBydiiDejaScan(immo.libelle, 20)}',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.averiaSansLibre(
                     color: Colors.black,
@@ -78,7 +79,7 @@ immoDejaImmobilisation(BuildContext context, Immobilisation immo) {
                               fit: BoxFit.contain)),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 35,
                     ),
                     Container(
                       height: size.height * .07,
@@ -86,7 +87,7 @@ immoDejaImmobilisation(BuildContext context, Immobilisation immo) {
                       // color: Colors.green,
                       child: Center(
                         child: Text(
-                          'immobilisation déja scannée ',
+                          'Immobilisation déja scannée ',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.averiaSansLibre(
                               color: Colors.black,

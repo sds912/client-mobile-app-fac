@@ -74,19 +74,7 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 25,
-                    ),
-                    Container(
-                      height: 56.0,
-                      width: size.width,
-                      child: Center(
-                        child: Text(
-                          'Veuillez préciser l\'état de l\'étiquette.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                      ),
+                      height: 81,
                     ),
                     SizedBox(
                       height: 50,
@@ -194,7 +182,7 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                                 image: AssetImage(
-                                    'assets/images/sans_code_barre.png'),
+                                    'assets/images/sans_code.png'),
                                 fit: BoxFit.cover)),
                       ),
                     ),
@@ -301,7 +289,7 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
                             // color: Colors.orange[800],
                             image: DecorationImage(
                                 image: AssetImage(
-                                    'assets/images/code_barre_defectueux.png'),
+                                    'assets/images/code-defecteux.png'),
                                 fit: BoxFit.cover)),
                       ),
                     ),
@@ -310,6 +298,17 @@ addImmoNiveauTrois(BuildContext context, Immobilisation immo) {
               ),
             ),
           )),
+      Positioned(
+        top: size.height * .41,
+        child: Container(
+          height: 56.0,
+          width: size.width,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/text_presision.png'),
+                  fit: BoxFit.fill)),
+        ),
+      ),
       bienvenuePageState.etat_du_bien
           ? positionedBottumNav(size, 7)
           : positionedBottumNav(size, 5)

@@ -55,20 +55,20 @@ firstPage(BuildContext context) {
                 image: DecorationImage(
                     image: AssetImage('assets/images/bienvenue.png'))),
           )),
-      Positioned(
-          top: size.height * .57,
-          left: size.width * .1,
-          child: Container(
-            height: size.height * .2,
-            width: size.width * .8,
+      // Positioned(
+      //     top: size.height * .57,
+      //     left: size.width * .1,
+      //     child: Container(
+      //       height: size.height * .2,
+      //       width: size.width * .8,
 
-            // color: Colors.green,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/text_bienvenue.png'))),
-          )),
+      //       // color: Colors.green,
+      //       decoration: BoxDecoration(
+      //           image: DecorationImage(
+      //               image: AssetImage('assets/images/text_bienvenue.png'))),
+      //     )),
       Positioned(
-          top: size.height * .65,
+          top: size.height * .6,
           left: size.width * .2,
           child: GestureDetector(
             onTap: () {
