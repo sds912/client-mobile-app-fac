@@ -13,6 +13,7 @@ import 'package:v1/pages/add-immos-niveau-deux.dart';
 import 'package:v1/pages/add-immos-niveau-trois.dart';
 import 'package:v1/pages/add-immos-niveau-une.dart';
 import 'package:v1/pages/add_localite.dart';
+import 'package:v1/pages/aide.dart';
 import 'package:v1/pages/chargement.dart';
 import 'package:v1/pages/choice-entreprise.dart';
 import 'package:v1/pages/deverrouler-page.dart';
@@ -98,6 +99,8 @@ class _BienvenuePageState extends State<BienvenuePage> {
   String password = '';
 
   int screenWelcome = 0;
+
+  int screenAide = 0;
 
   bool isTwo = false;
 
@@ -293,8 +296,7 @@ class _BienvenuePageState extends State<BienvenuePage> {
                         : screenWelcome == 4
                             ? menuPage(context)
                             : bienvenuePageState.screenWelcome == 5
-                                ? AddniveauUn(
-                                    immo: bienvenuePageState.immo)
+                                ? AddniveauUn(immo: bienvenuePageState.immo)
                                 : bienvenuePageState.screenWelcome == 6
                                     ? listImmo(context)
                                     : bienvenuePageState.screenWelcome == 7
@@ -321,8 +323,9 @@ class _BienvenuePageState extends State<BienvenuePage> {
                                                         : bienvenuePageState
                                                                     .screenWelcome ==
                                                                 10
-                                                            ? menuPageDeux(
-                                                                context)
+                                                            ? AidePage(
+                                                                screen: bienvenuePageState
+                                                                    .screenAide)
                                                             : bienvenuePageState
                                                                         .screenWelcome ==
                                                                     11

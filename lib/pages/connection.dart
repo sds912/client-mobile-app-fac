@@ -149,30 +149,38 @@ connectionPage(BuildContext context) {
                   SizedBox(
                     height: 32.0,
                   ),
-                 GestureDetector(
-                      onTap: () => connectDoc(context),
-                      child: Container(
-                        height: size.height * .07,
-                        width: size.width * .6,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/connexion_icon.png')),
-                            borderRadius: BorderRadius.circular(15)),
-                      ),
+                  GestureDetector(
+                    onTap: () => connectDoc(context),
+                    child: Container(
+                      height: size.height * .07,
+                      width: size.width * .6,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/connexion_icon.png')),
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
                   ),
                 ],
               ))),
       Positioned(
         top: size.height * .9,
-        child: Container(
-          height: size.height * .07,
-          width: size.width,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image:
-                      AssetImage('assets/images/guide_utilisation_buttom.png'),
-                  fit: BoxFit.cover)),
+        child: GestureDetector(
+          onTap: () {
+            bienvenuePageState.setState(() {
+              bienvenuePageState.screenAide = bienvenuePageState.screenWelcome;
+              bienvenuePageState.screenWelcome = 10;
+            });
+          },
+          child: Container(
+            height: size.height * .07,
+            width: size.width,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                        'assets/images/guide_utilisation_buttom.png'),
+                    fit: BoxFit.contain)),
+          ),
         ),
       ),
     ],

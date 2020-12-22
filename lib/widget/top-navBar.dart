@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:v1/pages/bienvenue.dart';
-import 'package:v1/utils/shared-preference.dart';
-import 'package:v1/utils/writte-file.dart';
 
 Positioned positionedTopNavbar(Size size) {
   return Positioned(
@@ -38,7 +36,9 @@ Positioned positionedTopNavbar(Size size) {
                         color: Colors.orange[700],
                       ),
                       onPressed: () {
+                        // ignore: invalid_use_of_protected_member
                         bienvenuePageState.setState(() {
+                          bienvenuePageState.screenAide = bienvenuePageState.screenWelcome;
                           bienvenuePageState.screenWelcome = 10;
                         });
                       }),
@@ -51,10 +51,12 @@ Positioned positionedTopNavbar(Size size) {
                       onPressed: () {
                         print(bienvenuePageState.isCloseInv);
                         if (bienvenuePageState.isCloseInv) {
+                        // ignore: invalid_use_of_protected_member
                           bienvenuePageState.setState(() {
                             bienvenuePageState.screenWelcome = 10;
                           });
                         } else {
+                        // ignore: invalid_use_of_protected_member
                           bienvenuePageState.setState(() {
                             bienvenuePageState.screenWelcome = 4;
                           });

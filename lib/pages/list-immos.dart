@@ -43,7 +43,7 @@ listImmo(context) {
             _controller.text = '';
             if (bienvenuePageState.lastLocalite.id != 0) {
               for (var immo in bienvenuePageState.immos) {
-                if (immo.code == t) {
+                if (immo.code == t.trim()) {
                   bienvenuePageState.setState(() {
                     bienvenuePageState.isImmoHere = true;
                     bienvenuePageState.immo = immo;
@@ -141,7 +141,7 @@ listImmo(context) {
             _controller.text = '';
             if (bienvenuePageState.lastLocalite.id != 0) {
               for (var immo in bienvenuePageState.immos) {
-                if (immo.code == t) {
+                if (immo.code == t.trim()) {
                   bienvenuePageState.setState(() {
                     bienvenuePageState.isImmoHere = true;
                     bienvenuePageState.immo = immo;
@@ -334,8 +334,8 @@ listImmo(context) {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                          image: AssetImage(
-                              'assets/images/cloturer_zone.png'))),
+                          image:
+                              AssetImage('assets/images/cloturer_zone.png'))),
                 ),
               ))
           : getUserRoleBool(bienvenuePageState.user) &&
@@ -433,10 +433,12 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                     child: item.etat == '1'
                         ? Icon(
                             Icons.check_box_rounded,
+                            size: 28,
                             color: Colors.green,
                           )
                         : Icon(
                             Icons.stop_rounded,
+                            size: 40,
                             color: Colors.red,
                           )),
                 onTap: () {
@@ -477,6 +479,37 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
 
                       sendDataRealTime();
                     });
+                  } else if (item.etat == '1' && item.image != '') {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState
+                          .immos_scanne[bienvenuePageState.immos_scanne
+                              .lastIndexWhere((element) =>
+                                  element.id == item.id &&
+                                  element.dateTime == item.dateTime)]
+                          .etat = '0';
+                    });
+                    setImmobilisationListFile(bienvenuePageState.immo);
+
+                    setListImmobilisationFileJson(
+                        bienvenuePageState.immos_scanne);
+
+                    sendDataRealTime();
+                  }
+                  else if (item.etat == '0' && item.image != '') {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState
+                          .immos_scanne[bienvenuePageState.immos_scanne
+                              .lastIndexWhere((element) =>
+                                  element.id == item.id &&
+                                  element.dateTime == item.dateTime)]
+                          .etat = '1';
+                    });
+                    setImmobilisationListFile(bienvenuePageState.immo);
+
+                    setListImmobilisationFileJson(
+                        bienvenuePageState.immos_scanne);
+
+                    sendDataRealTime();
                   }
                 },
               ),
@@ -542,11 +575,13 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                     // color: Colors.blue,
                     child: item.etat == '1'
                         ? Icon(
-                            Icons.check_box_sharp,
+                            Icons.check_box_rounded,
                             color: Colors.green,
+                            size: 28,
                           )
                         : Icon(
                             Icons.stop_rounded,
+                            size: 40,
                             color: Colors.red,
                           )),
                 onTap: () {
@@ -586,6 +621,36 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
 
                       sendDataRealTime();
                     });
+                  }else if (item.etat == '1' && item.image != '') {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState
+                          .immos_scanne[bienvenuePageState.immos_scanne
+                              .lastIndexWhere((element) =>
+                                  element.id == item.id &&
+                                  element.dateTime == item.dateTime)]
+                          .etat = '0';
+                    });
+                    setImmobilisationListFile(bienvenuePageState.immo);
+
+                    setListImmobilisationFileJson(
+                        bienvenuePageState.immos_scanne);
+
+                    sendDataRealTime();
+                  } else if (item.etat == '0' && item.image != '') {
+                    bienvenuePageState.setState(() {
+                      bienvenuePageState
+                          .immos_scanne[bienvenuePageState.immos_scanne
+                              .lastIndexWhere((element) =>
+                                  element.id == item.id &&
+                                  element.dateTime == item.dateTime)]
+                          .etat = '1';
+                    });
+                    setImmobilisationListFile(bienvenuePageState.immo);
+
+                    setListImmobilisationFileJson(
+                        bienvenuePageState.immos_scanne);
+
+                    sendDataRealTime();
                   }
                 },
               ),

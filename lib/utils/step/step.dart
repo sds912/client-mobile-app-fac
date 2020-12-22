@@ -178,7 +178,7 @@ step(BuildContext context) {
                         icon: Container(),
                         hint: bienvenuePageState.niveauUnLocalite.nom == ''
                             ? Text(subStringBydii(
-                                bienvenuePageState.libelle_localite[0].libelle,
+                                bienvenuePageState.libelle_localite[1].libelle,
                                 20))
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauUnLocalite.nom, 20)),

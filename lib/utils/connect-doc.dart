@@ -57,9 +57,10 @@ connectDoc(BuildContext context) async {
                             bienvenuePageState.user.localites
                                 .add(item.toString());
                           }
+                          print('kies tu');
                           // bienvenuePageState.screenWelcome = 4;
                         });
-                    UtilsHttp.getByIssa(
+                        UtilsHttp.getByIssa(
                             '/mobile-inventaire/${bienvenuePageState.user.entreprisess.first.id}')
                         .then((value) {
                       var data = json.decode(value.data);
@@ -78,6 +79,7 @@ connectDoc(BuildContext context) async {
                               .add(item.libelle);
                         }
                         bienvenuePageState.screenWelcome = 4;
+                          print('kies tu toi');
                         
                       });
                     });

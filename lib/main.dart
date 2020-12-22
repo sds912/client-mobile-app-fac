@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
+          // ignore: deprecated_member_use
           body1: GoogleFonts.averiaSansLibre(
             fontSize: 18
           ),
