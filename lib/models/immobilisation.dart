@@ -5,6 +5,7 @@ class Immobilisation {
   String libelle;
   String code;
   String emplacement;
+  // ignore: non_constant_identifier_names
   String emplacement_string ;
   String description;
   String etat;
@@ -27,6 +28,7 @@ class Immobilisation {
     this.image = '',
     this.lecteur = '',
     this.dateTime='',
+  // ignore: non_constant_identifier_names
     this.emplacement_string='',
     this.search_list 
   });

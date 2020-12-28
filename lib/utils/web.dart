@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
 
-const base_url = 'https://0e818dbaab5c.ngrok.io/api'; //ENLEVER LES SS
+const base_url = 'http://back-test.inventaire.asma-technologies.fr/api'; //ENLEVER LES SS
 
 // const base_url = 'https://b86746fbe031.ngrok.io/api';
 

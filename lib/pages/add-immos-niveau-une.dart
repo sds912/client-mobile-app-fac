@@ -363,38 +363,6 @@ addImmosNiveauUn(context, Immobilisation immo) {
                         suggestions: bienvenuePageState.catalogue_recherche,
                       ),
                     ),
-                    // Container(
-                    //   height: 45,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     color: Colors.grey[300],
-                    //   ),
-                    //   child: TextField(
-                    //     textAlign: TextAlign.center,
-                    //     onSubmitted: (t) {
-                    //       FocusScope.of(context).nextFocus();
-                    //       bienvenuePageState.setState(() {
-                    //         bienvenuePageState.shwoCardRechercheCatalogue = false;
-                    //       });
-                    //     },
-                    //     onChanged: (String value) {
-                    //       bienvenuePageState.setState(() {
-                    //         bienvenuePageState.immo.libelle = value;
-                    //         print(bienvenuePageState.immo.libelle);
-                    //         bienvenuePageState.shwoCardRechercheCatalogue = true;
-                    //       });
-                    //       searchBydii(value, bienvenuePageState.catalogue_recherche);
-                    //     },
-
-                    //     decoration: InputDecoration(
-                    //         border: InputBorder.none,
-                    //         disabledBorder: InputBorder.none,
-                    //         hintText:
-                    //             bienvenuePageState.immo.libelle == "" ? "Libellé" : bienvenuePageState.immo.libelle,
-                    //         hintStyle:
-                    //             TextStyle(fontSize: 16, color: Colors.black)),
-                    //   ),
-                    // ),
                     SizedBox(
                       height: 30,
                     ),
@@ -510,30 +478,14 @@ addImmosNiveauUn(context, Immobilisation immo) {
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).viewInsets.bottom,
-                    )
+                    ),
+                    SizedBox(height: size.height * .3,)
                   ],
                 ),
               ),
             ),
           )),
       positionedBottumNav(size, screen),
-      // bienvenuePageState.shwoCardRechercheCatalogue ? Positioned(
-      //   top: size.height * .45,
-      //   left: size.width * .25,
-      //   child: Card(
-
-      //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      //     child: Container(
-      //       height: size.height * .2,
-      //       width: size.width * .5,
-      //       child: ListView(
-      //         children: listSelected(bienvenuePageState.catalogue_recherche_affichage),
-      //         physics: BouncingScrollPhysics(),
-      //       ),
-      //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-      //     ),
-      //   ),
-      // ) : Container(),
     ],
   );
 }
