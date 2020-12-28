@@ -100,10 +100,14 @@ listImmo(context) {
                       libelle: '',
                       commentaire: '',
                       description: '',
-                      code: t,
+                      code: t.trim(),
                       lecteur: bienvenuePageState.user.nom,
-                      emplacement: '',
+                      emplacement:
+                          bienvenuePageState.lastLocalite.id.toString(),
                       etat: '');
+
+                  bienvenuePageState.isNewImmo = true;
+
                   bienvenuePageState.isImmoHere = false;
                 });
                 verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
@@ -113,108 +117,10 @@ listImmo(context) {
                       bienvenuePageState.screenWelcome = 14;
                     });
                   } else {
+                    print(bienvenuePageState.immo.toString());
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 5;
                       bienvenuePageState.shwoCardRechercheCatalogue = true;
-                      bienvenuePageState.isImmoHere = false;
-                    });
-                  }
-                });
-              }
-            }
-          },
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: ''),
-        ),
-      ),
-      Positioned(
-        child: TextField(
-          showCursor: false,
-          controller: _controller,
-          enabled: true,
-          autofocus: true,
-          onSubmitted: (t) {
-            print('deuxieme texfield');
-            _controller.text = '';
-            if (bienvenuePageState.lastLocalite.id != 0) {
-              for (var immo in bienvenuePageState.immos) {
-                if (immo.code == t.trim()) {
-                  bienvenuePageState.setState(() {
-                    bienvenuePageState.isImmoHere = true;
-                    bienvenuePageState.immo = immo;
-                    bienvenuePageState.immo.emplacement_string =
-                        bienvenuePageState.lastLocalite.nom;
-                    bienvenuePageState.immo.search_list =
-                        bienvenuePageState.search_immo;
-                    bienvenuePageState.immo.lecteur =
-                        bienvenuePageState.user.nom;
-                    bienvenuePageState.immo.dateTime =
-                        DateTime.now().toString();
-                  });
-                }
-              }
-              if (bienvenuePageState.isImmoHere) {
-                verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
-                    .then((verif) {
-                  if (verif) {
-                    bienvenuePageState.setState(() {
-                      bienvenuePageState.screenWelcome = 14;
-                    });
-                  } else {
-                    // immo etat du bien et algo
-                    if (bienvenuePageState.etat_du_bien) {
-                      bienvenuePageState.setState(() {
-                        bienvenuePageState.screenWelcome = 13;
-                      });
-                    } else {
-                      bienvenuePageState.setState(() {
-                        bienvenuePageState.immo.etat = '1';
-                        bienvenuePageState.immo.status = '1';
-                        bienvenuePageState.immo.emplacement =
-                            bienvenuePageState.lastLocalite.id.toString();
-                        bienvenuePageState.immo.search_list =
-                            bienvenuePageState.search_immo;
-                        bienvenuePageState.immo.emplacement_string =
-                            bienvenuePageState.lastLocalite.nom;
-                        bienvenuePageState.immos_scanne
-                            .add(bienvenuePageState.immo);
-                        setImmobilisationListFile(bienvenuePageState.immo);
-                        setImmobilisationListFileJson(bienvenuePageState.immo);
-                      });
-                      sendDataRealTime();
-                      FocusScope.of(context).previousFocus();
-                    }
-                  }
-                });
-                bienvenuePageState.setState(() {
-                  bienvenuePageState.isImmoHere = false;
-                });
-              } else {
-                bienvenuePageState.setState(() {
-                  bienvenuePageState.immo = new Immobilisation(
-                      id: 0,
-                      libelle: '',
-                      commentaire: '',
-                      description: '',
-                      code: t,
-                      lecteur: bienvenuePageState.user.nom,
-                      emplacement: '',
-                      etat: '');
-                  bienvenuePageState.isImmoHere = false;
-                });
-                verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
-                    .then((verif) {
-                  if (verif) {
-                    bienvenuePageState.setState(() {
-                      bienvenuePageState.screenWelcome = 14;
-                    });
-                  } else {
-                    bienvenuePageState.setState(() {
-                      bienvenuePageState.shwoCardRechercheCatalogue = true;
-                      bienvenuePageState.screenWelcome = 5;
                       bienvenuePageState.isImmoHere = false;
                     });
                   }
@@ -494,8 +400,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
                         bienvenuePageState.immos_scanne);
 
                     sendDataRealTime();
-                  }
-                  else if (item.etat == '0' && item.image != '') {
+                  } else if (item.etat == '0' && item.image != '') {
                     bienvenuePageState.setState(() {
                       bienvenuePageState
                           .immos_scanne[bienvenuePageState.immos_scanne
@@ -621,7 +526,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
 
                       sendDataRealTime();
                     });
-                  }else if (item.etat == '1' && item.image != '') {
+                  } else if (item.etat == '1' && item.image != '') {
                     bienvenuePageState.setState(() {
                       bienvenuePageState
                           .immos_scanne[bienvenuePageState.immos_scanne
