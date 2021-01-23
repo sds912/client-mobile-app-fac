@@ -20,8 +20,8 @@ showDialogEtatDuBien(BuildContext context, int status) {
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
-                width: 24.0,
-                height: 24.0,
+                width: 40.0,
+                height: 40.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/close_dialog.png'),

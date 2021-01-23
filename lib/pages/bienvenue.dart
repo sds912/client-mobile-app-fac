@@ -51,14 +51,22 @@ class _BienvenuePageState extends State<BienvenuePage> {
 
   bool isNewVersionOfCode = true;
 
+  FocusNode focusNode;
+
   List<Widget> listeStepDrowDown = [];
 
   List<String> running = [];
   List<String> closing = [];
+  
+  List<Immobilisation> immos_history = [];
+
 
   int taille_libelle = 0;
 
   bool isTextDecodeTextField = true;
+
+  String currentRole = '';
+  String currentEnterprise = '';
 
   String textDecodeTextEncode = '';
 
@@ -224,6 +232,8 @@ class _BienvenuePageState extends State<BienvenuePage> {
   }
 
   showScreen() async {
+
+    print(bienvenuePageState.currentRole);
     // Future.delayed(Duration(milliseconds: 100)).then((value) {
     //   setState(() {
     //     screenWelcome = 0;
@@ -273,7 +283,19 @@ class _BienvenuePageState extends State<BienvenuePage> {
   void initState() {
     showScreen();
     super.initState();
+    focusNode = FocusNode();
+
+    
   }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

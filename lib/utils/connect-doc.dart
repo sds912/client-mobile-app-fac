@@ -12,6 +12,9 @@ import 'package:v1/utils/decodeMatricule.dart';
 import 'package:v1/utils/shared-preference.dart';
 import 'package:v1/utils/web.dart';
 import 'package:v1/widget/showDialogError.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+
+const roles = ['ROLE_Admin','ROLE_SuperViseurGene','ROLE_SuperViseurAdjoint'];
 
 connectDoc(BuildContext context) async {
   bool doSothething = true;
@@ -23,17 +26,30 @@ connectDoc(BuildContext context) async {
         "username": bienvenuePageState.email,
         "password": bienvenuePageState.password
       }).then((value) {
+          
+
+      
         print(' value.statusCode => ${value.statusCode}');
         if (value.statusCode == 200) {
+
+          Map<String, dynamic> decodedToken = JwtDecoder.decode(value.data['token']);
+        
+           if(roles.contains(decodedToken['roles'][0])){
+            showDialogError(
+              context: context, msg: 'Vous n\'avez pas accès à cette appareille');
+
+      
+           }else{
+
+
           setToken(value.data['token']).then((verif) {
+            print(verif);
             bienvenuePageState.setState(() {
               bienvenuePageState.screenWelcome = -1;
             });
             if (verif) {
-              print(verif);
               UtilsHttp.getByIssa('/info').then((value) {
                 var info = json.decode(value.data);
-                // print(info);
                 bienvenuePageState.setState(() {
                   bienvenuePageState.user = User.fromJsonOne(info[0]);
                   if (bienvenuePageState.user.entreprisess.length > 1) {
@@ -41,11 +57,13 @@ connectDoc(BuildContext context) async {
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = 16;
                     });
-                  } else {
-                    print(bienvenuePageState.user.entreprisess);
-                    UtilsHttp.getByIssa(
+
+                     try {
+                       
+                      UtilsHttp.getByIssa(
                                 '/mobile-locality/${bienvenuePageState.user.entreprisess.first.id}')
                             .then((value) {
+                            print("localites: $value");
                           var data = json.decode(value.data);
                           bienvenuePageState.setState(() {
                             bienvenuePageState.libelle_localite =
@@ -60,9 +78,45 @@ connectDoc(BuildContext context) async {
                           print('kies tu');
                           // bienvenuePageState.screenWelcome = 4;
                         });
+
+                    } catch (_){
+                      print('error locality');
+
+                    }
+                  } else {
+                    print(bienvenuePageState.user.entreprisess);
+                    print('hello world verifie');
+                    try {
+
+                      UtilsHttp.getByIssa(
+                                '/mobile-locality/${bienvenuePageState.user.entreprisess.first.id}')
+                            .then((value) {
+                            print("localites: $value");
+                          var data = json.decode(value.data);
+                          bienvenuePageState.setState(() {
+                            bienvenuePageState.libelle_localite =
+                                LibelleLocalite.fromJson(data);
+
+                            bienvenuePageState.listeLocalites =
+                                Localites.fromJson(data);
+                          });
+                          for (var item in data['idOfMyLoAffectes']) {
+                            bienvenuePageState.user.localites
+                                .add(item.toString());
+                          }
+                          print('kies tu');
+                          // bienvenuePageState.screenWelcome = 4;
+                        });
+
+                    } catch (_){
+                      print('error locality');
+
+                    }
+                    
                         UtilsHttp.getByIssa(
                             '/mobile-inventaire/${bienvenuePageState.user.entreprisess.first.id}')
                         .then((value) {
+                          print(value.data);
                       var data = json.decode(value.data);
                       // print(value);
                       bienvenuePageState.setState(() {
@@ -77,6 +131,7 @@ connectDoc(BuildContext context) async {
                         for (var item in bienvenuePageState.catalogues) {
                           bienvenuePageState.catalogue_recherche
                               .add(item.libelle);
+                          
                         }
                         bienvenuePageState.screenWelcome = 4;
                           print('kies tu toi');
@@ -88,6 +143,11 @@ connectDoc(BuildContext context) async {
               });
             }
           });
+
+           }
+          
+
+
         } else {
           showDialogError(
               context: context, msg: 'Email ou Mot de Passe Incorect');

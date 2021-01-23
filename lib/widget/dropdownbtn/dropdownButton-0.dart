@@ -23,11 +23,13 @@ Padding paddingDrownButton0({Size size , bool isLast = false})  {
               width: size.width * .05,
             ),
             Container(
-              width: size.width * 0.45,
+              width: size.width * 0.635,
               child: DropdownButton(
                 items: bienvenuePageState.niveauZero,
                 dropdownColor: quatriemeColor,
                 autofocus: true,
+                isExpanded: true,
+
                 itemHeight: 50,
                 focusColor: Colors.red,
                 style: GoogleFonts.averiaSansLibre(
@@ -60,20 +62,16 @@ Padding paddingDrownButton0({Size size , bool isLast = false})  {
                   });
                 },
                 underline: Container(),
-                icon: Container(),
+                icon: Icon(
+              Icons.arrow_drop_down_outlined,
+              size: 28,
+            ),
                 hint: bienvenuePageState.niveauZeroLocalite.nom == ''
                     ? Text(subStringBydii(
                         bienvenuePageState.libelle_localite[0].libelle, 20))
                     : Text(subStringBydii(
                         bienvenuePageState.niveauZeroLocalite.nom, 20)),
               ),
-            ),
-            SizedBox(
-              width: size.width * .08,
-            ),
-            Icon(
-              Icons.arrow_drop_down_outlined,
-              size: 28,
             )
           ],
         ),

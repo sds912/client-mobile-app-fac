@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:v1/models/catalogue.dart';
 import 'package:v1/models/immobilisation.dart';
 import 'package:v1/models/inventaire.dart';
 import 'package:v1/models/libelle_localite.dart';
@@ -36,28 +37,48 @@ choiceEntrepriseHelper(BuildContext context) {
                 width: size.width * .05,
               ),
               Container(
-                width: size.width * 0.45,
+                width: size.width * 0.635,
                 child: DropdownButton(
                   items: bienvenuePageState.entrepriseDropdown,
                   dropdownColor: quatriemeColor,
                   itemHeight: 50,
                   focusColor: Colors.red,
+                  isExpanded: true,
                   style: GoogleFonts.averiaSansLibre(
                       fontSize: 14,
                       color: troisiemeColor,
                       fontWeight: FontWeight.w400),
                   onChanged: (t) async {
+                    
                     bienvenuePageState.setState(() {
                       bienvenuePageState.screenWelcome = -1;
+                      bienvenuePageState.currentEnterprise = t.denomination;
                     });
+
 
                     await UtilsHttp.getByIssa('/mobile-inventaire/${t.id}')
                         .then((value) {
+                          print('inventaire $value');
                       var data = json.decode(value.data);
                       bienvenuePageState.inventaire = Inventaire.fromJson(data);
+                     
                       bienvenuePageState.setState(() {
                         bienvenuePageState.immos =
                             Immobilisation.fromJson(data);
+                        print(
+                            'bienvenuePageState.immos.length => ${bienvenuePageState.immos.length}');
+                        bienvenuePageState.inventaire =
+                            Inventaire.fromJson(data);
+                        bienvenuePageState.catalogues =
+                            Catalogue.fromJson(data);
+                        for (var item in bienvenuePageState.catalogues) {
+                          bienvenuePageState.catalogue_recherche
+                              .add(item.libelle);
+                          
+                        }
+                        bienvenuePageState.screenWelcome = 4;
+                          print('kies tu toi');
+                        
                       });
                     });
                     await UtilsHttp.getByIssa('/mobile-locality/${t.id}')
@@ -76,20 +97,17 @@ choiceEntrepriseHelper(BuildContext context) {
                     });
                   },
                   underline: Container(),
-                  icon: Container(),
+                  icon: Icon(
+                Icons.arrow_drop_down_outlined,
+                size: 28,
+              ),
                   hint: bienvenuePageState.entreprise.denomination == ''
                       ? Text(subStringBydii('Choisir votre entreprise', 28))
                       : Text(subStringBydii(
                           bienvenuePageState.entreprise.denomination, 20)),
                 ),
-              ),
-              SizedBox(
-                width: size.width * .08,
-              ),
-              Icon(
-                Icons.arrow_drop_down_outlined,
-                size: 28,
               )
+              
             ],
           ),
         ),

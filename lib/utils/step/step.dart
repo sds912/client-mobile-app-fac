@@ -13,9 +13,12 @@ step(BuildContext context) {
   bienvenuePageState.setState(() {
     bienvenuePageState.niveauZero = buildSection();
   });
-  return ListView(
+  return bienvenuePageState.libelle_localite.isEmpty ? Container(child: Text('Pas de localités', style: TextStyle(color: Colors.white),)):
+  
+  ListView(
     padding: EdgeInsets.all(8.0),
     physics: BouncingScrollPhysics(),
+    
     children: [
       // Continent
       Padding(
@@ -31,16 +34,20 @@ step(BuildContext context) {
                 width: size.width * .05,
               ),
               Container(
-                width: size.width * 0.45,
+                width: size.width * 0.635,
                 child: DropdownButton(
+                  
+                  isExpanded: true,
                   items: bienvenuePageState.niveauZero,
                   dropdownColor: quatriemeColor,
                   autofocus: true,
                   itemHeight: 50,
+                  
                   focusColor: Colors.red,
                   style: GoogleFonts.averiaSansLibre(
                       fontSize: 14,
                       color: troisiemeColor,
+                      
                       fontWeight: FontWeight.w400),
                   onChanged: (t) async {
                     await getAllNewLocalite().then((liste) async {
@@ -84,20 +91,17 @@ step(BuildContext context) {
                     });
                   },
                   underline: Container(),
-                  icon: Container(),
+                  icon:Icon(
+                Icons.arrow_drop_down_outlined,
+                size: 28,
+              ),
                   hint: bienvenuePageState.niveauZeroLocalite.nom == ''
                       ? Text(subStringBydii(
                           bienvenuePageState.libelle_localite[0].libelle, 20))
                       : Text(subStringBydii(
                           bienvenuePageState.niveauZeroLocalite.nom, 20)),
+                
                 ),
-              ),
-              SizedBox(
-                width: size.width * .08,
-              ),
-              Icon(
-                Icons.arrow_drop_down_outlined,
-                size: 28,
               )
             ],
           ),
@@ -119,11 +123,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauUn,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -175,7 +180,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauUnLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[1].libelle,
@@ -183,13 +191,6 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauUnLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
                   ],
                 ),
@@ -212,11 +213,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauDeux,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -271,7 +273,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauDeuxLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[2].libelle,
@@ -279,14 +284,8 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauDeuxLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
+                    
                   ],
                 ),
               ),
@@ -308,11 +307,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauTrois,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -368,7 +368,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauTroisLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[3].libelle,
@@ -377,14 +380,8 @@ step(BuildContext context) {
                                 bienvenuePageState.niveauTroisLocalite.nom,
                                 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
+                    
                   ],
                 ),
               ),
@@ -406,11 +403,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauQuatre,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -467,7 +465,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauQuatreLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[4].libelle,
@@ -476,13 +477,6 @@ step(BuildContext context) {
                                 bienvenuePageState.niveauQuatreLocalite.nom,
                                 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
                   ],
                 ),
@@ -505,11 +499,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauCinq,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -570,7 +565,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauCinqLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[5].libelle,
@@ -578,14 +576,8 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauCinqLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
+                    
                   ],
                 ),
               ),
@@ -607,11 +599,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauSix,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -674,7 +667,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauSixLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[6].libelle,
@@ -682,13 +678,6 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauSixLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
                   ],
                 ),
@@ -711,11 +700,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauSept,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -778,7 +768,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauSeptLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[7].libelle,
@@ -786,14 +779,8 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauSeptLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
+                    
                   ],
                 ),
               ),
@@ -815,11 +802,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauHuit,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -884,7 +872,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauHUitLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[7].libelle,
@@ -892,13 +883,6 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauHUitLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
                   ],
                 ),
@@ -921,11 +905,12 @@ step(BuildContext context) {
                       width: size.width * .05,
                     ),
                     Container(
-                      width: size.width * 0.45,
+                      width: size.width * 0.635,
                       child: DropdownButton(
                         items: bienvenuePageState.niveauNeuf,
                         dropdownColor: quatriemeColor,
                         autofocus: true,
+                        isExpanded: true,
                         itemHeight: 50,
                         focusColor: Colors.red,
                         style: GoogleFonts.averiaSansLibre(
@@ -992,7 +977,10 @@ step(BuildContext context) {
                           });
                         },
                         underline: Container(),
-                        icon: Container(),
+                        icon: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      size: 28,
+                    ),
                         hint: bienvenuePageState.niveauNeufLocalite.nom == ''
                             ? Text(subStringBydii(
                                 bienvenuePageState.libelle_localite[6].libelle,
@@ -1000,14 +988,8 @@ step(BuildContext context) {
                             : Text(subStringBydii(
                                 bienvenuePageState.niveauNeufLocalite.nom, 20)),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * .08,
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_outlined,
-                      size: 28,
                     )
+                    
                   ],
                 ),
               ),

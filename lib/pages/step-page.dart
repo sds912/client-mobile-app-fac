@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
@@ -10,6 +12,7 @@ stepPage(BuildContext context) {
   Size size = MediaQuery.of(context).size;
   if (bienvenuePageState.isTailleLibDiff) {
     getListLibelleLocalite().then((liste) {
+      print(liste);
       bienvenuePageState.setState(() {
         bienvenuePageState.libelle_localite.addAll(liste);
         print(bienvenuePageState.libelle_localite);
@@ -65,7 +68,15 @@ stepPage(BuildContext context) {
               top: size.height * .81,
               left: size.width * .2,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+
+                  
+                    await  getImmosHistory();
+
+                    bienvenuePageState.immos_scanne = bienvenuePageState.immos_history;
+
+                  
+  
                   if (bienvenuePageState.lastLocalite.id == '0') {
                     showDialogError(
                         context: context,

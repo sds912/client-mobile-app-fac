@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:v1/pages/bienvenue.dart';
 import 'package:v1/utils/shared-preference.dart';
+import 'package:v1/utils/web.dart';
 // import 'package:v1/pages/bienvenue.dart';
 
 showDialogError({BuildContext context, String msg, double fontSize = 14.0}) {
@@ -24,8 +25,8 @@ showDialogError({BuildContext context, String msg, double fontSize = 14.0}) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),
@@ -87,8 +88,8 @@ showDialogErrorByTakeTofOrStatus(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),
@@ -146,8 +147,8 @@ showDialogErrorSuccess(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),
@@ -209,8 +210,8 @@ showDialogErrorComptage(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),
@@ -243,7 +244,10 @@ showDialogErrorComptage(
               setCloseComptageZone(bienvenuePageState.lastLocalite)
                   .then((verif) {
                 if (verif) {
+                  sendDataRealTime();
                   bienvenuePageState.setState(() {
+                    deleteImmobilisationsList().then((value) => bienvenuePageState.immos_scanne = [])
+                    ;
                     bienvenuePageState.screenWelcome = 3;
                     bienvenuePageState.closing
                         .add(bienvenuePageState.lastLocalite.id);
@@ -320,8 +324,8 @@ showDialogErrorComptageDeblocage(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),
@@ -431,8 +435,8 @@ showDialogParams({BuildContext context}) => showDialog(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      width: 20.0,
-                      height: 20.0,
+                      width: 40.0,
+                      height: 40.0,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image:

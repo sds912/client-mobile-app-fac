@@ -20,8 +20,8 @@ showDialogAddLocalite(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 20.0,
-                  height: 20.0,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/close_dialog.png'),

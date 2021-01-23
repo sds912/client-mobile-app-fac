@@ -60,6 +60,7 @@ class _AidePageState extends State<AidePage> {
             color: Colors.transparent,
             child: ListView(
               physics: BouncingScrollPhysics(),
+              controller: scrollController,
               children: [
                 // ACCUEIL
                 listeAide(
@@ -87,7 +88,7 @@ class _AidePageState extends State<AidePage> {
                     textTitle: '4. Menu'.toUpperCase(),
                     screen: 4,
                     textBody: 'text body',
-                    url: 'assets/images/background_step_page.png',
+                    url: 'assets/images/background_color.png',
                     color: Colors.grey[50]),
                 // Procéder au comptage'
                 listeAide(

@@ -135,6 +135,7 @@ class _AddImmosNiveauUnCatalogueState extends State<AddImmosNiveauUnCatalogue> {
           // clearOnSubmit: true,
           textChanged: (text) => bienvenuePageState.setState(() {
             bienvenuePageState.immo.libelle = text;
+            print(text);
           }),
           decoration: InputDecoration(
               enabledBorder: InputBorder.none,

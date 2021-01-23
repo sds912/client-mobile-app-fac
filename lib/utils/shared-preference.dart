@@ -10,6 +10,7 @@ import 'package:v1/models/libelle_localite.dart';
 import 'package:v1/models/localites.dart';
 import 'package:v1/models/users.dart';
 import 'package:v1/pages/bienvenue.dart';
+import 'package:v1/utils/web.dart';
 
 getInventaireFile() => SharedPreferences.getInstance().then((prefs) {
       String inventaire = prefs.getString('inventaires');
@@ -23,6 +24,52 @@ getInventaireFile() => SharedPreferences.getInstance().then((prefs) {
         bienvenuePageState.screenWelcome = 2;
       });
     });
+
+
+saveImmosHistory(List<Immobilisation> immos) async {
+  //var str = jsonEncode(immos);
+  var json = jsonEncode(immos, toEncodable: (e) => e.toString());
+ await  SharedPreferences.getInstance().then((prefs) =>prefs.setString('immosHistory', json));
+ await getImmosHistory();
+
+}
+
+ getImmosHistory() async  {
+ List<Immobilisation> list  = [];
+SharedPreferences.getInstance().then((prefs) async {
+  String key = 'immosHistory';
+
+  if(prefs.getString(key) != null){
+    var jsonData = jsonDecode(prefs.getString(key));
+    for(var immo in jsonData){
+
+       var p = immo.split('|');
+        list.add(Immobilisation(
+            id: int.parse(p[0]),
+            code: p[2],
+            dateTime: p[9],
+            commentaire: p[5],
+            description: p[3],
+            emplacement: p[4],
+            etat: p[6],
+            libelle: p[1],
+            status: p[7],
+            image: p[8],
+            lecteur: p[11],
+            search_list: p[12],
+            emplacement_string: p[10]));
+
+    }
+  }
+    bienvenuePageState.setState(() {
+      bienvenuePageState.immos_history = list;
+    });
+   
+   });
+
+ 
+   
+  }
 
 Future<bool> verifInventaireExist() => SharedPreferences.getInstance()
     .then((prefs) => prefs.getString('inventaire') == null ? false : true);
@@ -87,7 +134,8 @@ setImmobilisationListFile(Immobilisation immo) async =>
       }
     });
 
-setImmobilisationListFileJson(Immobilisation immo) async =>
+setImmobilisationListFileJson(Immobilisation immo) async {
+    print('immos : ${immo.image}');
     SharedPreferences.getInstance().then((prefs) {
       var im = '';
       if (immo.image == '') {
@@ -104,7 +152,7 @@ setImmobilisationListFileJson(Immobilisation immo) async =>
             prefs.getString('immobilisationsJson') + ',' + str;
         prefs.setString('immobilisationsJson', new_listImmoJson);
       }
-    });
+    });}
 setInventaireExport(String value) async =>
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString('inventaireExport', value);
@@ -164,6 +212,10 @@ Future<List<Immobilisation>> getImmobilisationListFile() {
             search_list: p[12],
             emplacement_string: p[10]));
       }
+
+      final ids = liste.map((e) => e.code).toSet();
+    liste.retainWhere((x) => ids.remove(x.code));
+      
       return liste;
     }
   });
@@ -191,7 +243,11 @@ Future<bool> verifIfImmoHereInSharedPreference(Immobilisation immo) async {
 Future<bool> setCloseComptageZone(Localites ln) =>
     SharedPreferences.getInstance().then((prefs) {
       if (prefs.getString('closeZone') == null) {
+
         return prefs.setString('closeZone', '1|${ln.id}');
+
+      
+
       } else {
         var new_string = prefs.getString('closeZone') + '#' + '1|${ln.id}';
 
@@ -277,6 +333,7 @@ Future<bool> setCloseInventaire(String inc_code) =>
 
 Future<bool> getCloseInventaire() =>
     SharedPreferences.getInstance().then((prefs) {
+      print(prefs);
       if (prefs.getString('closeInventaire') == null)
         return false;
       else if (prefs.getString('closeInventaire') == '1') return true;
@@ -403,6 +460,8 @@ Future<bool> setLibelleLocalite(String str) => SharedPreferences.getInstance()
 
 Future<List<LibelleLocalite>> getListLibelleLocalite() =>
     SharedPreferences.getInstance().then((prefs) {
+    
+
       List<LibelleLocalite> liste = [];
       if (prefs.getString('libelleLocalites') == null) {
         return liste;
@@ -474,3 +533,18 @@ Future<String> getListIdRunningString() async =>
         return str;
       });
     });
+
+
+
+  Future<void> deleteImmobilisationsJson() async  {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   prefs.remove('immobilisationsJson');
+   print("immo erased");
+   }
+
+
+  Future<void> deleteImmobilisationsList() async  {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   prefs.remove('immobilisations');
+   print("immo erased");
+   }

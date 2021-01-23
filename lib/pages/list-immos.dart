@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,22 +25,26 @@ listImmo(context) {
   bienvenuePageState.setState(() {
     bienvenuePageState.isTwo = false;
   });
-  return Stack(
-    children: [
-      Container(
-        height: size.height,
-        width: size.height,
-        color: Colors.white,
-      ),
-      Positioned(
-        child: TextField(
-          showCursor: false,
-          controller: _controller,
-          enabled: true,
-          autofocus: true,
-          onSubmitted: (t) {
-            _controller.text = '';
-            if (bienvenuePageState.lastLocalite.id != 0) {
+
+  _controller.addListener(() async {
+
+   
+    String t = _controller.text;
+
+
+    if(t.length >= 16){
+
+          
+
+    }
+    
+  });
+
+  
+
+
+  onSubmit(t) {
+    if (bienvenuePageState.lastLocalite.id != 0) {
               for (var immo in bienvenuePageState.immos) {
                 if (immo.code == t.trim()) {
                   bienvenuePageState.setState(() {
@@ -59,6 +62,8 @@ listImmo(context) {
                 }
               }
               if (bienvenuePageState.isImmoHere) {
+
+                print('yes immo are here');
                 verifIfImmoHereInSharedPreference(bienvenuePageState.immo)
                     .then((verif) {
                   if (verif) {
@@ -85,8 +90,9 @@ listImmo(context) {
                         setImmobilisationListFile(bienvenuePageState.immo);
                         setImmobilisationListFileJson(bienvenuePageState.immo);
                       });
-                      sendDataRealTime();
                       FocusScope.of(context).nextFocus();
+                      sendDataRealTime();
+
                     }
                   }
                 });
@@ -127,12 +133,24 @@ listImmo(context) {
                 });
               }
             }
-          },
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: ''),
+  }
+  return Stack(
+    children: [
+      Container(
+        height: size.height,
+        width: size.height,
+        color: Colors.white,
+      ),
+     
+      Positioned(
+          top: size.height*.0,
+          width: 200,
+              child: TextField(
+          autofocus: true,
+          controller: _controller,
+          
+          focusNode: FocusNode(),
+          onSubmitted: (t) => onSubmit(t),
         ),
       ),
       Positioned(
@@ -144,11 +162,12 @@ listImmo(context) {
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: [
-              getTable(bienvenuePageState.immos_scanne, context),
+              getTable(bienvenuePageState.immos_history, context),
             ],
           ),
         ),
       ),
+      
       Positioned(
         top: size.height * .1,
         child: Padding(
@@ -161,9 +180,26 @@ listImmo(context) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: size.width * .3,
+                  width: size.width * 0.15,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 45.0, top: 8.0),
+                    padding: const EdgeInsets.only(left: 20.0, top: 8.0),
+                    child: Text(
+                      'N°',
+                      style: GoogleFonts.averiaSansLibre(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 2,
+                  color: Colors.white,
+                ),
+                Container(
+                  width: size.width * .25,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, top: 8.0),
                     child: Text(
                       'Code',
                       style: GoogleFonts.averiaSansLibre(
@@ -178,9 +214,9 @@ listImmo(context) {
                   color: Colors.white,
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .3,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 38.0),
+                    padding: const EdgeInsets.only(top: 8.0, left: 20.0),
                     child: Text(
                       'Description',
                       style: GoogleFonts.averiaSansLibre(
@@ -195,7 +231,7 @@ listImmo(context) {
                   color: Colors.white,
                 ),
                 Container(
-                  width: size.width * .27,
+                  width: size.width * .25,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, left: 15.0),
                     child: Text(
@@ -232,8 +268,10 @@ listImmo(context) {
               top: size.height * .82,
               left: size.width * .2,
               child: GestureDetector(
-                onTap: () async => showDialogErrorComptage(
-                    context: context, msg: 'Voulez vous clotûrer le comptage?'),
+                onTap: () async {
+                 showDialogErrorComptage(
+                    context: context, msg: 'Voulez vous clotûrer le comptage?');
+ },
                 child: Container(
                   height: size.height * .07,
                   width: size.width * .6,
@@ -272,16 +310,30 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
   int i = 0;
   Size size = MediaQuery.of(context).size;
   if (liste.length > 0) {
-    for (var item in liste) {
-      i = i + 1;
+    liste.asMap().forEach((index, item) {
+     
+      index = index +1;
 
-      if (i % 2 == 0) {
+      if (index % 2 == 0) {
         l.add(DataRow(
             color: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
               return Colors.grey[50];
             }),
             cells: [
+                DataCell(
+                  Container(
+                    width: size.width * .05,
+                    child: Center(
+                      child: Text(index.toString(),style: GoogleFonts.averiaSerifLibre(
+                          fontSize: 10, fontWeight: FontWeight.w300),
+                    )),
+                  ), onTap: () {
+                bienvenuePageState.setState(() {
+                  bienvenuePageState.immobilisation_detail = item;
+                  bienvenuePageState.screenWelcome = 9;
+                });
+              }),
               DataCell(
                   Container(
                     width: size.width * .2,
@@ -428,6 +480,19 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
             cells: [
               DataCell(
                   Container(
+                    
+                    width: size.width * .05,
+                    // color: Colors.red,
+                    child: Text(index.toString(),style: GoogleFonts.averiaSerifLibre(
+                          fontSize: 10, fontWeight: FontWeight.w300) ),
+                  ), onTap: () {
+                bienvenuePageState.setState(() {
+                  bienvenuePageState.immobilisation_detail = item;
+                  bienvenuePageState.screenWelcome = 9;
+                });
+              }),
+              DataCell(
+                  Container(
                     width: size.width * .2,
                     // color: Colors.red,
                     child: Text(
@@ -561,7 +626,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
               ),
             ]));
       }
-    }
+    });
   }
 
   l.add(DataRow(
@@ -570,6 +635,7 @@ List<DataRow> getDataRow(List<Immobilisation> liste, BuildContext context) {
         return Colors.grey[50];
       }),
       cells: [
+        DataCell(Container()),
         DataCell(Container()),
         DataCell(Container()),
         DataCell(Container()),
@@ -584,6 +650,8 @@ Widget getTable(List<Immobilisation> p, BuildContext context) {
       horizontalMargin: 24.0,
       sortAscending: true,
       columns: [
+        DataColumn(label: Text('')),
+
         DataColumn(label: Text('')),
         DataColumn(label: Text('')),
         DataColumn(label: Text('')),

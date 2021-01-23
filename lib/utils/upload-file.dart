@@ -11,6 +11,7 @@ getFile() async {
   FilePicker.getFile().then((file) {
     if (file.path.split('.')[file.path.split('.').length - 1] == 'json') {
       Map<dynamic, dynamic> l = jsonDecode(file.readAsStringSync());
+      print(l);
       bienvenuePageState.setState(() {
         bienvenuePageState.screenWelcome = -1;
       });
@@ -20,6 +21,7 @@ getFile() async {
             bienvenuePageState.setState(() {
               bienvenuePageState.inventaire = Inventaire.fromJson(l);
               bienvenuePageState.immos = Immobilisation.fromJson(l);
+             
               bienvenuePageState.libelle_localite = LibelleLocalite.fromJson(l);
               print(bienvenuePageState.libelle_localite.length);
               bienvenuePageState.users = User.fromJson(l);

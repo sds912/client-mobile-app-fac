@@ -21,9 +21,11 @@ Positioned positionedTopNavbar(Size size) {
                       image: AssetImage('assets/images/logo_top_bar.png'),
                       fit: BoxFit.contain)),
             ),
-            SizedBox(
+            Container(
               width: size.width * .35,
-            ),
+              child: Text(" | ${bienvenuePageState.currentEnterprise} ", style: TextStyle(fontSize: 12.0),)
+              ),
+            
             Container(
               width: size.width * .3,
               child: Row(
